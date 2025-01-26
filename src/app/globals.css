@@ -7,6 +7,12 @@
   --foreground: #171717;
 }
 
+@font-face {
+  font-family: "Serie";
+  src: url("./assets/fonts/neueSerie57-Medium.woff") format("woff"),
+    url("./assets/fonts/neueSerie57-Medium.woff2") format("woff2");
+}
+
 @media (prefers-color-scheme: dark) {
   :root {
     --background: #0a0a0a;
@@ -15,7 +21,22 @@
 }
 
 body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+  /* color: var(--foreground); */
+  /* background: var(--background); */
+  font-family: "Serie", sans-serif;
+  font-size: 12px;
+  line-height: 13.68px;
+  letter-spacing: -2%;
+}
+
+@keyframes hard-flicker {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
 }
