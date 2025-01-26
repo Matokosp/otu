@@ -9,7 +9,7 @@ const Content = ({
 }: {
   columns?: 1 | 2;
   text?: string;
-  texts?: [{ title: string; text: string }];
+  texts?: { title: string; text: string }[];
 }) => {
   const content =
     columns === 1 && text ? (

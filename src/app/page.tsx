@@ -1,4 +1,3 @@
-import Image from "next/image";
 import { CustomImage } from "./Components/Image/Image";
 import Menu from "./Components/Menu/Menu";
 import Link from "next/link";

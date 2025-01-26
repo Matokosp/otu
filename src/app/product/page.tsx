@@ -8,11 +8,10 @@ import Button from "../Components/Button/Button";
 
 import siteData from "../data/data.json";
 
-export const Page = () => {
-  const [activeItem, setActiveItem] = useState(null);
+export default function Page() {
+  const [activeItem, setActiveItem] = useState<null | number>(null);
   const [activeImage, setActiveImage] = useState(0);
-  const imageRefs = useRef<HTMLDivElement[]>([]);
-  const carouselRef = useRef<HTMLDivElement | null>(null);
+  const imageRefs = useRef<HTMLDivElement[] | any>([]);
 
   const images = [
     "/images/chair1.png",
@@ -20,8 +19,8 @@ export const Page = () => {
     "/images/chair3.png",
   ];
 
-  const handleClick = (i: { i: int }) => {
-    activeItem === i ? setActiveItem(null) : setActiveItem(i);
+  const handleClick = (i: number) => {
+    setActiveItem(activeItem === i ? null : i);
   };
 
   const handleImageButtonClick = (i: number) => {
@@ -43,7 +42,7 @@ export const Page = () => {
     };
 
     const observerCallback = (entries: IntersectionObserverEntry[]) => {
-      entries.forEach((entry) => {
+      entries.forEach((entry: any) => {
         if (entry.isIntersecting) {
           const index = imageRefs.current.indexOf(
             entry.target as HTMLDivElement
@@ -60,12 +59,12 @@ export const Page = () => {
       observerOptions
     );
 
-    imageRefs.current.forEach((ref) => {
+    imageRefs.current.forEach((ref: any) => {
       if (ref) observer.observe(ref);
     });
 
     return () => {
-      imageRefs.current.forEach((ref) => {
+      imageRefs.current.forEach((ref: any) => {
         if (ref) observer.unobserve(ref);
       });
     };
@@ -145,7 +144,7 @@ export const Page = () => {
             {images.map((image, i) => {
               return (
                 <div
-                  ref={(el) => (imageRefs.current[i] = el!)}
+                  ref={(el: any) => (imageRefs.current[i] = el!)}
                   key={images[i]}
                   className="w-full"
                   style={{
@@ -195,6 +194,4 @@ export const Page = () => {
       </main>
     </div>
   );
-};
-
-export default Page;
+}

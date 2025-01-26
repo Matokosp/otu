@@ -1,8 +1,8 @@
 import Content from "../Components/Content/Content";
 import Menu from "../Components/Menu/Menu";
 
-export const Page = () => {
-  const texts = [
+export default function Page() {
+  const texts: { title: string; text: string }[] = [
     {
       title: "Contact",
       text: "enquires@oftheuseless.com",
@@ -37,12 +37,10 @@ export const Page = () => {
   ];
 
   return (
-    <div className="relative min-h-[calc(100vh-716px)]">
+    <main className="relative min-h-[calc(100vh-716px)]">
       <Menu page />
       <div className="h-[180px]"></div>
       <Content texts={texts} columns={2} />
-    </div>
+    </main>
   );
-};
-
-export default Page;
+}
