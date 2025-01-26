@@ -14,10 +14,13 @@ const Footer = () => {
               <Link href="/info">Lead times & Shipping</Link>
             </li>
             <li>
-              <Link href="/info">Exchange & returns</Link>
+              <Link href="/info">Payments</Link>
             </li>
             <li>
               <Link href="/info">Trade</Link>
+            </li>
+            <li>
+              <Link href="/info">Exchange & returns</Link>
             </li>
           </ul>
           <ul>
