@@ -8,16 +8,16 @@ const Footer = () => {
         <div className="col-span-3 flex flex-col gap-y-[50px]">
           <ul>
             <li>
-              <Link href="/contact">Contact</Link>
+              <Link href="/info">Contact</Link>
             </li>
             <li>
-              <Link href="/shipping">Lead times & Shipping</Link>
+              <Link href="/info">Lead times & Shipping</Link>
             </li>
             <li>
-              <Link href="/returns">Exchange & returns</Link>
+              <Link href="/info">Exchange & returns</Link>
             </li>
             <li>
-              <Link href="/trade">Trade</Link>
+              <Link href="/info">Trade</Link>
             </li>
           </ul>
           <ul>
