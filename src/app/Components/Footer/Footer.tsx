@@ -14,9 +14,6 @@ const Footer = () => {
               <Link href="/info">Lead times & Shipping</Link>
             </li>
             <li>
-              <Link href="/info">Payments</Link>
-            </li>
-            <li>
               <Link href="/info">Trade</Link>
             </li>
             <li>
