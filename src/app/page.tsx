@@ -6,16 +6,16 @@ export default function Home() {
   return (
     <div className="relative">
       <Menu />
-      <main className="relative mt-[-100vh] pt-[73px] pb-[33px]">
+      <main className="relative mt-[-100svh] lg:pt-[73px] pb-[33px] pt-[55vh]">
         <div className="w-[calc(100vw/12*2)] px-[10px] grid fixed top-[50vh] translate-y-[-50%]">
-          <div className="pl-[10%]">
+          <div className="pl-[10%] min-w-[163px]">
             <Link href={"/"}>
               <CustomImage alt="" src="/images/logo.svg" className="w-full" />
             </Link>
           </div>
         </div>
-        <div className="grid-cols-4 xl:grid-cols-12 grid px-[10px] gap-x-[10px]">
-          <div className="col-start-4 col-end-10">
+        <div className="grid-cols-4 lg:grid-cols-12 grid px-[10px] gap-x-[10px]">
+          <div className="col-span-4 lg:col-start-4 lg:col-end-10">
             <Link href={"/product"}>
               <CustomImage
                 ratio="4/5"
@@ -26,8 +26,8 @@ export default function Home() {
             </Link>
           </div>
         </div>
-        <div className="grid-cols-4 xl:grid-cols-12 grid mt-[10px] gap-x-[10px]">
-          <div className="col-start-1 col-end-8">
+        <div className="grid-cols-4 lg:grid-cols-12 grid mt-[10px] gap-[10px]">
+          <div className="col-span-3 lg:col-start-1 lg:col-end-8">
             <Link href={"/product"}>
               <CustomImage
                 ratio="2/3"
@@ -37,7 +37,8 @@ export default function Home() {
               />
             </Link>
           </div>
-          <div className="col-start-8 col-end-13">
+          <div className="lg:hidden col-span-1" />
+          <div className="col-start-3 col-end-5 lg:col-start-8 lg:col-end-13">
             <Link href={"/product"}>
               <CustomImage
                 ratio="4/5"
@@ -48,8 +49,8 @@ export default function Home() {
             </Link>
           </div>
         </div>
-        <div className="grid-cols-4 xl:grid-cols-12 grid mt-[10px] gap-x-[10px] px-[10px]">
-          <div className="col-start-4 col-end-10">
+        <div className="grid-cols-4 lg:grid-cols-12 grid lg:mt-[10px] mt-[100px] gap-[10px] px-[10px]">
+          <div className="lg:col-start-4 lg:col-end-10 col-span-4 order-2 lg:order-1">
             <Link href={"/product"}>
               <CustomImage
                 ratio="4/5"
@@ -59,11 +60,10 @@ export default function Home() {
               />
             </Link>
           </div>
-          <div className="col-start-10 col-end-13">
+          <div className="lg:col-start-10 lg:col-end-13 col-span-4 order-1 lg:order-2">
             <p className="uppercase">
-              A soft and romantic mint inspired by unstained affection and
-              devotion. Amorist gently fuses green mint, peppermint and menthol,
-              resulting in a restrained expression of a true quintessential.
+              Like a door opened to winter, fresh ice, burning light, crackling
+              snow, and a warm cooking stove.
             </p>
           </div>
         </div>

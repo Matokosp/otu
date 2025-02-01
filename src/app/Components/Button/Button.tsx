@@ -2,7 +2,15 @@
 
 import React, { useState } from "react";
 
-const Button = ({ link, text }: { link?: string; text: string }) => {
+const Button = ({
+  link,
+  text,
+  className,
+}: {
+  link?: string;
+  text: string;
+  className?: string;
+}) => {
   const [text1, text2] = text.split("|");
   const words = [...text1.split(" "), ...text2.split(" ")]; // Combine all words
   const [order, setOrder] = useState<number[]>([]); // Randomized order of words
@@ -27,7 +35,7 @@ const Button = ({ link, text }: { link?: string; text: string }) => {
     link && (
       <a
         href={link}
-        className="w-full bg-black block text-white p-[10px] uppercase flex justify-between"
+        className={`w-full bg-black block text-white p-[10px] uppercase flex justify-between ${className}`}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
       >

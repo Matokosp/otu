@@ -7,25 +7,26 @@ const Menu = ({ page, product }: { page?: boolean; product?: boolean }) => {
         !page && "h-screen"
       }`}
     >
-      <nav className="grid grid-cols-12 p-[10px] gap-x-[10px] mb-[25px] w-screen">
+      <nav className="grid lg:grid-cols-12 grid-cols-4 p-[10px] gap-x-[10px] mb-[25px] w-screen">
         <p className="uppercase col-span-3 pointer-events-auto">
           <Link href={"/"}>
             release 01 <br />— Stockholm, Sweden
           </Link>
         </p>
-        <p className="uppercase col-span-3 pointer-events-auto">
+        <p className="uppercase lg:col-span-3 text-right lg:text-left pointer-events-auto">
           <Link href="/about">about</Link>
         </p>
-        <p className="uppercase col-span-3 pointer-events-auto">
-          <Link href="/contact">contact</Link>
+        <p className="uppercase col-span-3 pointer-events-auto hidden lg:block">
+          <Link href="/info#contact">contact</Link>
         </p>
       </nav>
       {!page && !product && (
         <div className="grid-cols-4 xl:grid-cols-12 grid gap-x-[10px] p-[10px] uppercase w-full">
-          <div className="col-span-3">
+          <div className="lg:col-span-3 col-span-4 hidden lg:block">
             <p>Introducing</p>
           </div>
-          <div className="col-span-3">
+          <div className="lg:col-span-3 col-span-4 flex gap-x-[10px]">
+            <p className="lg:hidden">Introducing</p>
             <p>No Hard Feelings Chair</p>
           </div>
         </div>
