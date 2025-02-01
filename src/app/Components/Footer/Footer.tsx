@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Typing } from "../Typing/Typing";
 
 const Footer = () => {
   return (
@@ -8,28 +9,45 @@ const Footer = () => {
         <div className="lg:col-span-3 col-span-2 flex flex-col gap-y-[30px] lg:gap-y-[50px]">
           <ul>
             <li>
-              <Link href="/info#contact">Contact</Link>
+              <Link href="/info#contact">
+                <Typing text="Contact" />
+              </Link>
             </li>
             <li>
-              <Link href="/info#shipping">Lead times & Shipping</Link>
+              <Link href="/info#shipping">
+                <Typing text="Lead times & Shipping" />
+              </Link>
             </li>
             <li>
-              <Link href="/info#payments">Payments</Link>
+              <Link href="/info#payments">
+                <Typing text="Payments" />
+              </Link>
             </li>
             <li>
-              <Link href="/info#trade">Trade</Link>
+              <Link href="/info#customPieces">
+                <Typing text="Custom pieces" />
+              </Link>
             </li>
             <li>
-              <Link href="/info#returns">Exchange & returns</Link>
+              <Link href="/info#trade">
+                <Typing text="Trade" />
+              </Link>
+            </li>
+            <li>
+              <Link href="/info#returns">
+                <Typing text="Exchange & returns" />
+              </Link>
             </li>
           </ul>
           <ul>
             <li>
-              <Link href={"/terms-and-conditions#privacy"}>Privacy Policy</Link>
+              <Link href={"/terms-and-conditions#privacy"}>
+                <Typing text="Privacy Policy" />
+              </Link>
             </li>
             <li>
               <Link href={"/terms-and-conditions#terms"}>
-                Terms & conditions
+                <Typing text="Terms & conditions" />
               </Link>
             </li>
           </ul>
@@ -39,10 +57,11 @@ const Footer = () => {
           <p>
             instagram <br />
             <a
+              target="_blank"
               className="opacity-50"
               href="https://www.instagram.com/oftheuseless"
             >
-              @OFTHEUSELESS
+              <Typing text="@OFTHEUSELESS" />
             </a>
           </p>
         </div>

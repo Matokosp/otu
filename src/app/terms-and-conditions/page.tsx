@@ -273,35 +273,15 @@ export default function Page() {
 
   const contentMenu = [
     {
-      title: "Contact",
-      link: "/info#contact",
-    },
-    {
-      title: "Lead times & Shipping",
-      link: "/info#shipping",
-    },
-    {
-      title: "Payments",
-      link: "/info#payments",
-    },
-    {
-      title: "Custom Pieces",
-      link: "/info#customPieces",
-    },
-    {
-      title: "Trade And business clients",
-      link: "/info#Trade",
-    },
-    {
-      title: "Exchange and Returns",
-      link: "/info#returns",
+      title: "",
+      link: "",
     },
   ];
 
   return (
     <main className="relative min-h-[calc(100vh-716px)]">
       <Menu page />
-      <div className="lg:h-[180px] h-[410px]"></div>
+      <div className="lg:h-[180px]"></div>
       <Content texts={texts} columns={2} menu={contentMenu} />
     </main>
   );

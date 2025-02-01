@@ -5,14 +5,18 @@ import Link from "next/link";
 import Menu from "../Components/Menu/Menu";
 import { CustomImage } from "../Components/Image/Image";
 import Button from "../Components/Button/Button";
+import { useGlobalContext } from "@/app/context/store";
 
 import siteData from "../data/data.json";
+import { Typing } from "../Components/Typing/Typing";
 
 export default function Page() {
   const [activeItem, setActiveItem] = useState<null | number>(null);
   const [activeImage, setActiveImage] = useState(0);
   const imageRefs = useRef<HTMLDivElement[] | any>([]);
   const [activeMobileImage, setActiveMobileImage] = useState(1);
+
+  const { windowHeight } = useGlobalContext();
 
   const images = [
     "/images/chair1.png",
@@ -75,8 +79,13 @@ export default function Page() {
   return (
     <div className="relative">
       <Menu product />
-      <main className="relative mt-[calc(-100vh+73px)]">
-        <div className="w-[calc(100vw/12*2)] px-[10px] grid fixed z-[99] top-[50vh] translate-y-[-50%]">
+      <main className="relative mt-[calc(-100svh+73px)]">
+        <div
+          className="w-[calc(100vw/12*2)] px-[10px] grid fixed z-[99] translate-y-[-50%]"
+          style={{
+            top: typeof windowHeight === "number" ? windowHeight / 2 : "50svh",
+          }}
+        >
           <div className="pl-[10%] min-w-[180px]">
             <Link href={"/"}>
               <CustomImage alt="" src="/images/logo.svg" className="w-full" />
@@ -84,7 +93,13 @@ export default function Page() {
           </div>
         </div>
         <div className="grid lg:grid-cols-12 grid-cols-4 lg:px-[10px] gap-x-[10px]">
-          <div className="col-span-5 h-[calc(100vh-73px)] sticky top-[73px] flex flex-col justify-between px-[10px] lg:px-0 pb-[10px] z-[3] pointer-events-none">
+          <div
+            className="col-span-5 sticky top-[73px] flex flex-col justify-between px-[10px] lg:px-0 pb-[10px] z-[3] pointer-events-none"
+            style={{
+              height:
+                typeof windowHeight === "number" ? windowHeight - 73 : "100svh",
+            }}
+          >
             <div className="flex justify-between">
               <div className="w-[calc(100vw/12*0.45)] flex flex-col gap-y-[5px] hidden lg:block">
                 {images.map((image, i) => {
@@ -106,19 +121,19 @@ export default function Page() {
                   );
                 })}
               </div>
-              <div className="lg:w-[calc(100vw/12*2)] w-2/4 ml-[50vw] mt-[40px] lg:ml-0 lg:mt-0 uppercase lg:mt-[calc(50vh-90px)] lg:block">
-                <div className="flex flex-col gap-y-[40px]">
+              <div className="lg:w-[calc(100vw/12*2)] w-[calc(50vw-10px)] ml-[50%] mt-[40px] lg:ml-0 lg:mt-0 uppercase lg:mt-[calc(50vh-90px)] lg:block">
+                <div className="flex flex-col gap-y-[40px] break-words">
                   <p className="hidden lg:block">
                     No Hard feelings chair <br />
                     OILED OAK
                   </p>
-                  <p>
+                  <p className="translate-x-[-100%] lg:translate-x-0">
                     Enquire <br />
                     <a
                       href="mailto:Enquires@oftheuseless.com"
-                      className="opacity-50"
+                      className="opacity-50 pointer-events-auto"
                     >
-                      Enquires@oftheuseless.com
+                      <Typing text="Enquires@oftheuseless.com" />
                     </a>
                   </p>
                   <p>
@@ -135,15 +150,16 @@ export default function Page() {
                             className="pointer-events-auto"
                             onClick={() => handleClick(i)}
                           >
-                            {item.title} +
+                            {item.title} {activeItem === i ? "-" : "+"}
                           </h4>
-                          <p
-                            className={`${
-                              activeItem === i ? "h-auto mb-[10px]" : "h-0"
+                          <span
+                            className={`pl-[20px] block ${
+                              activeItem === i
+                                ? "h-auto mb-[15px] mt-[5px]"
+                                : "h-0"
                             }`}
-                          >
-                            {item.text}
-                          </p>
+                            dangerouslySetInnerHTML={{ __html: item.text }}
+                          />
                         </li>
                       );
                     })}
@@ -157,7 +173,15 @@ export default function Page() {
               text="enquire|made to order"
             />
           </div>
-          <div className="col-span-5 flex flex-col gap-y-[10px] px-[10px] lg:px-0 pb-[10px] mt-[-45vh] lg:mt-[unset]">
+          <div
+            className="col-span-5 flex flex-col gap-y-[10px] px-[10px] lg:px-0 pb-[10px] lg:!mt-[unset]"
+            style={{
+              marginTop:
+                typeof windowHeight === "number"
+                  ? -(windowHeight / 2 - 64)
+                  : "calc(-50svh - 64px)",
+            }}
+          >
             {images.map((image, i) => {
               return (
                 <div
