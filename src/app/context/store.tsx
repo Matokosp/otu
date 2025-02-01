@@ -20,7 +20,7 @@ interface ContextProps {
   };
   isCustomCursor: string | null;
   setIsCustomCursor: Dispatch<SetStateAction<string | null>>;
-  windowHeight: number;
+  windowHeight: number | string;
 }
 
 const GlobalContext = createContext<ContextProps>({
@@ -39,7 +39,7 @@ export const GlobalContextProvider = ({ children }: any) => {
   const [sectionInView, setSectionInView] = useState(0);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [isCustomCursor, setIsCustomCursor] = useState<string | null>(null);
-  const [windowHeight, setWindowHeight] = useState(0);
+  const [windowHeight, setWindowHeight] = useState<string | number>("100svh");
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -49,6 +49,21 @@ export const GlobalContextProvider = ({ children }: any) => {
       setMousePosition({ x: clientX, y: clientY });
     };
 
+    const removeHashOnLoad = () => {
+      if (window.location.hash) {
+        history.replaceState(null, "", window.location.pathname);
+      }
+      if (window) {
+        window.scrollTo(0, 0);
+      }
+    };
+
+    if (typeof window !== "undefined") {
+      setWindowHeight(
+        window.visualViewport ? window.visualViewport.height : "100svh"
+      );
+    }
+
     const onResize = () => {
       const availableHeight = window.visualViewport
         ? window.visualViewport.height
@@ -57,6 +72,7 @@ export const GlobalContextProvider = ({ children }: any) => {
     };
 
     onResize();
+    removeHashOnLoad();
 
     document.addEventListener("mousemove", onMouseMove);
     window.addEventListener("resize", onResize);

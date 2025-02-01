@@ -7,6 +7,7 @@ const Content = ({
   text,
   texts,
   menu,
+  fixed,
 }: {
   columns?: 1 | 2;
   text?: string;
@@ -15,6 +16,7 @@ const Content = ({
     title: string;
     link: string;
   }[];
+  fixed?: boolean;
 }) => {
   const content =
     columns === 1 && text ? (
@@ -43,19 +45,8 @@ const Content = ({
     );
   return (
     <div className="grid grid-cols-4 lg:grid-cols-12 gap-x-[10px] px-[10px] uppercase lg:gap-y-[35px]">
-      <div
-        className={`w-[calc(100vw/12*2)] px-[10px] grid fixed ${
-          menu ? "top-[410px]" : "top-[50vh]"
-        } translate-y-[-50%] z-[999]`}
-      >
-        <div className="pl-[10%] min-w-[180px] translate-x-[-10px]">
-          <Link href={"/"}>
-            <CustomImage alt="" src="/images/logo.svg" className="w-full" />
-          </Link>
-        </div>
-      </div>
       {menu && (
-        <div className="lg:hidden fixed top-[100px] w-[50vw] left-[50vw]">
+        <div className="lg:hidden w-[calc(50vw-10px)] ml-[50vw] absolute col-span-4">
           <ul className="flex flex-col gap-y-[10px]">
             {menu.map((item) => {
               return (
@@ -69,6 +60,21 @@ const Content = ({
           </ul>
         </div>
       )}
+      <div
+        className={`w-[calc(100vw/12*2)] px-[10px] grid lg:fixed ${
+          text && fixed && "fixed"
+        } ${
+          menu
+            ? "mt-[calc(50svh-72px)] mb-[55px] lg:mt-0 lg:mb-0 lg:top-[50svh]"
+            : "top-[50svh]"
+        } translate-y-[-50%] z-[999]`}
+      >
+        <div className="pl-[10%] min-w-[180px] translate-x-[-10px]">
+          <Link href={"/"}>
+            <CustomImage alt="" src="/images/logo.svg" className="w-full" />
+          </Link>
+        </div>
+      </div>
       <div className="lg:col-span-3 hidden lg:block" />
       {content}
     </div>

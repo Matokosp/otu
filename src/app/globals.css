@@ -31,7 +31,7 @@ body {
 }
 
 a {
-  cursor: pointer;
+  cursor: pointer !important ;
 }
 
 @keyframes hard-flicker {

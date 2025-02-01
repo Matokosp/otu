@@ -2,37 +2,54 @@
 
 import Link from "next/link";
 import { useGlobalContext } from "@/app/context/store";
+import { Typing } from "../Typing/Typing";
 
-const Menu = ({ page, product }: { page?: boolean; product?: boolean }) => {
+const Menu = ({
+  page,
+  product,
+}: {
+  page?: boolean;
+  product?: boolean;
+  fixed?: boolean;
+}) => {
   const { windowHeight } = useGlobalContext();
   return (
     <div
-      className={`z-[999] sticky top-0 flex flex-col pointer-events-none`}
+      className={`z-[999] sticky top-0 flex flex-col pointer-events-none w-screen`}
       style={{ height: !page ? windowHeight : "" }}
     >
       <nav className="grid lg:grid-cols-12 grid-cols-4 p-[10px] gap-x-[10px] mb-[25px] w-screen">
         <p className="uppercase col-span-3 pointer-events-auto">
           <Link href={"/"}>
-            release 01 <br />— Stockholm, Sweden
+            <Typing text="release 01 <br> — Stockholm, Sweden" />
           </Link>
         </p>
         <p className="uppercase lg:col-span-3 text-right lg:text-left pointer-events-auto">
-          <Link href="/about">about</Link>
+          <Link href="/product">
+            <Typing text="shop" />
+          </Link>
         </p>
         <p className="uppercase col-span-3 pointer-events-auto hidden lg:block">
-          <Link href="/info#contact">contact</Link>
+          <Link href="/about">
+            <Typing text="about" />
+          </Link>
         </p>
       </nav>
       {!page && !product && (
-        <div className="grid-cols-4 xl:grid-cols-12 grid gap-x-[10px] p-[10px] uppercase w-full absolute bottom-0">
+        <a
+          href="/product"
+          className="grid-cols-4 lg:grid-cols-12 grid gap-x-[10px] p-[10px] block uppercase w-screen absolute bottom-0 pointer-events-auto"
+        >
           <div className="lg:col-span-3 col-span-4 hidden lg:block">
-            <p>Introducing</p>
+            <Typing text="Introducing" />
           </div>
           <div className="lg:col-span-3 col-span-4 flex gap-x-[10px]">
-            <p className="lg:hidden">Introducing</p>
-            <p>No Hard Feelings Chair</p>
+            <p className="lg:hidden">
+              <Typing text="Introducing" />
+            </p>
+            <Typing text="No Hard Feelings Chair" />
           </div>
-        </div>
+        </a>
       )}
     </div>
   );
