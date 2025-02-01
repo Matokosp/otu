@@ -27,6 +27,11 @@ body {
   font-size: 12px;
   line-height: 13.68px;
   letter-spacing: -2%;
+  background-color: #fffffc;
+}
+
+a {
+  cursor: pointer;
 }
 
 @keyframes hard-flicker {
