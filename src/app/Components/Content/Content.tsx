@@ -48,7 +48,7 @@ const Content = ({
           menu ? "top-[410px]" : "top-[50vh]"
         } translate-y-[-50%] z-[999]`}
       >
-        <div className="pl-[10%] min-w-[180px]">
+        <div className="pl-[10%] min-w-[180px] translate-x-[-10px]">
           <Link href={"/"}>
             <CustomImage alt="" src="/images/logo.svg" className="w-full" />
           </Link>
