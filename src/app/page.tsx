@@ -8,8 +8,8 @@ export default function Home() {
   return (
     <div className="relative">
       <Menu />
-      <main className="relative mt-[-100svh] lg:pt-[73px] pb-[33px] pt-[55vh]">
-        <div className="w-[calc(100vw/12*2)] px-[10px] grid fixed top-[50vh] translate-y-[-50%]">
+      <main className="relative mt-[-100svh] lg:pt-[73px] pb-[33px] pt-[40vh]">
+        <div className="w-[calc(100vw/12*2)] px-[10px] grid fixed top-[35vh] translate-y-[-50%]">
           <div className="pl-[10%] min-w-[180px]">
             <Link href={"/"}>
               <CustomImage alt="" src="/images/logo.svg" className="w-full" />
