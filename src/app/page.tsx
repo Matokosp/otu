@@ -1,3 +1,5 @@
+"use client";
+
 import { CustomImage } from "./Components/Image/Image";
 import Menu from "./Components/Menu/Menu";
 import Link from "next/link";
@@ -8,7 +10,7 @@ export default function Home() {
       <Menu />
       <main className="relative mt-[-100svh] lg:pt-[73px] pb-[33px] pt-[55vh]">
         <div className="w-[calc(100vw/12*2)] px-[10px] grid fixed top-[50vh] translate-y-[-50%]">
-          <div className="pl-[10%] min-w-[163px]">
+          <div className="pl-[10%] min-w-[180px]">
             <Link href={"/"}>
               <CustomImage alt="" src="/images/logo.svg" className="w-full" />
             </Link>
@@ -22,6 +24,7 @@ export default function Home() {
                 src="/images/heroImage[4_5].png"
                 alt=""
                 className="w-full"
+                priority
               />
             </Link>
           </div>

@@ -77,7 +77,7 @@ export default function Page() {
       <Menu product />
       <main className="relative mt-[calc(-100vh+73px)]">
         <div className="w-[calc(100vw/12*2)] px-[10px] grid fixed z-[99] top-[50vh] translate-y-[-50%]">
-          <div className="pl-[10%] min-w-[163px]">
+          <div className="pl-[10%] min-w-[180px]">
             <Link href={"/"}>
               <CustomImage alt="" src="/images/logo.svg" className="w-full" />
             </Link>
