@@ -57,7 +57,7 @@ const Content = ({
       {menu && (
         <div className="lg:hidden fixed top-[100px] w-[50vw] left-[50vw]">
           <ul className="flex flex-col gap-y-[10px]">
-            {menu.map((item, _i) => {
+            {menu.map((item) => {
               return (
                 <li key={item.title}>
                   <p>
