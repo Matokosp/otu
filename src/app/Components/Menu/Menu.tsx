@@ -5,7 +5,6 @@ import { useGlobalContext } from "@/app/context/store";
 
 const Menu = ({ page, product }: { page?: boolean; product?: boolean }) => {
   const { windowHeight } = useGlobalContext();
-  console.log(windowHeight);
   return (
     <div
       className={`z-[999] sticky top-0 flex flex-col pointer-events-none`}
