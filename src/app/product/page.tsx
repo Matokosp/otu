@@ -113,8 +113,13 @@ export default function Page() {
                     OILED OAK
                   </p>
                   <p>
-                    € 1900 <br />
-                    <span className="opacity-50">Including VAT</span>
+                    Enquire <br />
+                    <a
+                      href="mailto:Enquires@oftheuseless.com"
+                      className="opacity-50"
+                    >
+                      Enquires@oftheuseless.com
+                    </a>
                   </p>
                   <p>
                     Handcrafted in Sweden <br />
