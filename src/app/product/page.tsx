@@ -106,9 +106,9 @@ export default function Page() {
                   );
                 })}
               </div>
-              <div className="w-[calc(100vw/12*2)] uppercase lg:mt-[calc(50vh-90px)] hidden lg:block">
+              <div className="lg:w-[calc(100vw/12*2)] w-2/4 ml-[50vw] mt-[40px] lg:ml-0 lg:mt-0 uppercase lg:mt-[calc(50vh-90px)] lg:block">
                 <div className="flex flex-col gap-y-[40px]">
-                  <p>
+                  <p className="hidden lg:block">
                     No Hard feelings chair <br />
                     OILED OAK
                   </p>
