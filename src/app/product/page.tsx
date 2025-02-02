@@ -43,22 +43,22 @@ export default function Page() {
     }
   };
 
-  const handleSticky = () => {
-    if (!stickyRef.current || !galleryRef.current) return;
+  // const handleSticky = () => {
+  //   if (!stickyRef.current || !galleryRef.current) return;
 
-    const rect = galleryRef.current.getBoundingClientRect();
-    const windowBottom = window.visualViewport
-      ? window.visualViewport.height
-      : window.innerHeight;
+  //   const rect = galleryRef.current.getBoundingClientRect();
+  //   const windowBottom = window.visualViewport
+  //     ? window.visualViewport.height
+  //     : window.innerHeight;
 
-    const shouldBeSticky = rect.bottom <= windowBottom - 45; // When the bottom of galleryRef is 10px above the window bottom
+  //   const shouldBeSticky = rect.bottom <= windowBottom - 45; // When the bottom of galleryRef is 10px above the window bottom
 
-    setIsSticky(shouldBeSticky);
-  };
-  useEffect(() => {
-    window.addEventListener("scroll", handleSticky);
-    return () => window.removeEventListener("scroll", handleSticky);
-  }, []);
+  //   setIsSticky(shouldBeSticky);
+  // };
+  // useEffect(() => {
+  //   window.addEventListener("scroll", handleSticky);
+  //   return () => window.removeEventListener("scroll", handleSticky);
+  // }, []);
 
   useEffect(() => {
     const observerOptions = {
@@ -233,34 +233,18 @@ export default function Page() {
         <div className="lg:hidden">
           <div
             ref={stickyRef}
-            className={`${
-              isSticky ? "sticky top-[73px]" : "fixed top-[73px]"
-            }  top-[73px] h-[calc(100svh-73px)] flex z-[999] flex-col justify-between pb-[10px] px-[10px] lg:hidden`}
-            style={{
-              height:
-                typeof windowHeight === "number"
-                  ? windowHeight - 73
-                  : "calc(100svh - 73px)",
-            }}
+            className={`
+            top-[73px] flex z-[999] flex-col justify-between pb-[10px] px-[10px] lg:hidden`}
           >
-            <div className="lg:w-[calc(100vw/12*2)] w-[100%] mt-[40px] lg:ml-0 lg:mt-0 uppercase lg:mt-[calc(50vh-90px)] lg:block">
+            <div className="w-[100%] mt-[40px] uppercase">
               <div className="flex flex-col gap-y-[40px] break-words">
-                <p className="">
-                  Enquire <br />
-                  <a
-                    href="mailto:Enquires@oftheuseless.com"
-                    className="opacity-50 pointer-events-auto"
-                  >
-                    <Typing text="Enquires@oftheuseless.com" />
-                  </a>
-                </p>
                 <p className="ml-[calc(50vw-10px)] lg:ml-0">
                   Handcrafted in Sweden <br />
                   LOCALLY SOURCED OAK
                 </p>
               </div>
-              <div className="mt-[10px] ml-[calc(50vw-10px)] lg:ml-0">
-                <ul className="[&>li>h4]:cursor-pointer">
+              <div className="mt-[10px] ml-[calc(50vw-10px)] relative">
+                <ul className="[&>li>h4]:cursor-pointer absolute">
                   {siteData.product.info.map((item, i) => {
                     return (
                       <li key={item.title} className="overflow-hidden">
@@ -284,17 +268,10 @@ export default function Page() {
                 </ul>
               </div>
             </div>
-            <Button
-              className="z-[999] pointer-events-auto"
-              link="mailto:info@otu.com"
-              text="enquire|made to order"
-            />
           </div>
 
           <div
-            className={`col-span-5 flex flex-col gap-y-[10px] px-[10px] pb-[10px] ${
-              isSticky ? "mt-[calc(-50svh-10px)]" : "mt-[calc(50svh)]"
-            }`}
+            className={`col-span-5 flex flex-col gap-y-[10px] px-[10px] pb-[10px] mt-[calc(50svh-81px)]`}
           >
             {images.map((image, i) => {
               return (
@@ -317,7 +294,7 @@ export default function Page() {
               );
             })}
           </div>
-          <div className="grid grid-cols-4 col-span-5 mb-[53px] gap-[10px] pb-[53px]">
+          <div className="grid grid-cols-4 col-span-5 mb-[10px] gap-[10px]">
             <div className="col-span-3 relative">
               {images.map((image, i) => {
                 return (
@@ -347,7 +324,6 @@ export default function Page() {
             <div
               className="col-span-1 relative z-[2] flex flex-col gap-[5px] items-end"
               ref={galleryRef}
-              onScroll={() => handleSticky()}
             >
               {images.map((image, i) => {
                 return (
@@ -376,9 +352,22 @@ export default function Page() {
               })}
             </div>
           </div>
+          <Button
+            className="z-[999] pointer-events-auto"
+            link="mailto:info@otu.com"
+            text="enquire|made to order"
+          />
+          <p className="px-[10px] mt-[10px] uppercase">
+            <a
+              href="mailto:Enquires@oftheuseless.com"
+              className="opacity-50 pointer-events-auto"
+            >
+              <Typing text="Enquires@oftheuseless.com" />
+            </a>
+          </p>
         </div>
 
-        <div className="grid lg:grid-cols-12 grid-cols-4 gap-[10px] px-[10px] mt-[100px] lg:mt-0">
+        <div className="grid lg:grid-cols-12 grid-cols-4 gap-[10px] px-[10px] mt-[31px] lg:mt-0">
           <div className="lg:col-span-5 col-span-4 flex flex-col justify-between gap-y-[100px] lg:gap-y-[unset]">
             <div className="w-full flex uppercase">
               <p className="lg:w-3/5 w-2/4">No Hard feelings chair</p>
