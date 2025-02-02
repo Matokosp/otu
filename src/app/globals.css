@@ -9,8 +9,8 @@
 
 @font-face {
   font-family: "Serie";
-  src: url("./assets/fonts/neueSerie57-Medium.woff") format("woff"),
-    url("./assets/fonts/neueSerie57-Medium.woff2") format("woff2");
+  src: url("./assets/fonts/neueSerie57®-Medium.woff") format("woff"),
+    url("./assets/fonts/neueSerie57®-Medium.woff2") format("woff2");
 }
 
 @media (prefers-color-scheme: dark) {
