@@ -121,13 +121,13 @@ export default function Page() {
                   );
                 })}
               </div>
-              <div className="lg:w-[calc(100vw/12*2)] w-[calc(50vw-10px)] ml-[50%] mt-[40px] lg:ml-0 lg:mt-0 uppercase lg:mt-[calc(50vh-90px)] lg:block">
+              <div className="lg:w-[calc(100vw/12*2)] w-[100%] mt-[40px] lg:ml-0 lg:mt-0 uppercase lg:mt-[calc(50vh-90px)] lg:block">
                 <div className="flex flex-col gap-y-[40px] break-words">
                   <p className="hidden lg:block">
                     No Hard feelings chair <br />
                     OILED OAK
                   </p>
-                  <p className="translate-x-[-100%] lg:translate-x-0">
+                  <p className="">
                     Enquire <br />
                     <a
                       href="mailto:Enquires@oftheuseless.com"
@@ -136,12 +136,12 @@ export default function Page() {
                       <Typing text="Enquires@oftheuseless.com" />
                     </a>
                   </p>
-                  <p>
+                  <p className="ml-[calc(50vw-10px)] lg:ml-0">
                     Handcrafted in Sweden <br />
                     LOCALLY SOURCED OAK
                   </p>
                 </div>
-                <div className="mt-[10px]">
+                <div className="mt-[10px] ml-[calc(50vw-10px)] lg:ml-0">
                   <ul className="[&>li>h4]:cursor-pointer">
                     {siteData.product.info.map((item, i) => {
                       return (
