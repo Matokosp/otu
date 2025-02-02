@@ -72,7 +72,8 @@ export default function Home() {
           <div className="lg:col-start-10 lg:col-end-13 col-span-4 order-1 lg:order-2">
             <p className="uppercase">
               the climb was tough on his flesh and bones. and yet, he would do
-              it all again.no hard feelings.
+              it all again. <br />
+              no hard feelings.
             </p>
           </div>
         </div>
