@@ -227,7 +227,6 @@ export default function Page() {
                     alt=""
                     className={`w-full`}
                     key={images[i]}
-                    priority
                   />
                 </div>
               );
@@ -294,7 +293,6 @@ export default function Page() {
                     alt=""
                     className={`w-full`}
                     key={images[i]}
-                    priority
                   />
                 </div>
               );
@@ -320,7 +318,6 @@ export default function Page() {
                         alt=""
                         className={`w-full`}
                         key={images[i]}
-                        priority
                       />
                     </div>
                   )
@@ -350,7 +347,6 @@ export default function Page() {
                         alt=""
                         className={`w-full`}
                         key={images[i]}
-                        priority
                       />
                     </div>
                   )

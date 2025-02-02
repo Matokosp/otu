@@ -31,7 +31,6 @@ export default function Home() {
                 src={images[0]}
                 alt=""
                 className="w-full"
-                priority
               />
             </Link>
           </div>
