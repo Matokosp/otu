@@ -9,32 +9,32 @@ const Footer = () => {
         <div className="lg:col-span-3 col-span-2 flex flex-col gap-y-[30px] lg:gap-y-[50px]">
           <ul>
             <li>
-              <Link href="/info#contact">
+              <Link href="/info">
                 <Typing text="Contact" />
               </Link>
             </li>
             <li>
-              <Link href="/info#shipping">
+              <Link href="/info">
                 <Typing text="Lead times & Shipping" />
               </Link>
             </li>
             <li>
-              <Link href="/info#payments">
+              <Link href="/info">
                 <Typing text="Payments" />
               </Link>
             </li>
             <li>
-              <Link href="/info#customPieces">
+              <Link href="/info">
                 <Typing text="Custom pieces" />
               </Link>
             </li>
             <li>
-              <Link href="/info#trade">
+              <Link href="/info">
                 <Typing text="Trade" />
               </Link>
             </li>
             <li>
-              <Link href="/info#returns">
+              <Link href="/info">
                 <Typing text="Exchange & returns" />
               </Link>
             </li>
