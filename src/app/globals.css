@@ -28,6 +28,9 @@ body {
   line-height: 13.68px;
   letter-spacing: -2%;
   background-color: #fffffc;
+
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 a {

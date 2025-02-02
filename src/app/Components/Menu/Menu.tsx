@@ -42,6 +42,22 @@ const Menu = ({
           </Link>
         </p>
       </nav>
+      {!page && !product && (
+        <a
+          href="/product"
+          className="grid-cols-4 lg:grid-cols-12 grid gap-x-[10px] p-[10px] block uppercase w-screen absolute bottom-0 pointer-events-auto"
+        >
+          <div className="lg:col-span-3 col-span-4 hidden lg:block">
+            <Typing text="Introducing" />
+          </div>
+          <div className="lg:col-span-3 col-span-4 flex gap-x-[10px]">
+            <p className="lg:hidden">
+              <Typing text="Introducing" />
+            </p>
+            <Typing text="No Hard Feelings Chair" />
+          </div>
+        </a>
+      )}
     </div>
   );
 };
