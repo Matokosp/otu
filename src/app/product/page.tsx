@@ -347,7 +347,7 @@ export default function Page() {
             <div
               className="col-span-1 relative z-[2] flex flex-col gap-[5px] items-end"
               ref={galleryRef}
-              onScroll={(e) => handleSticky()}
+              onScroll={() => handleSticky()}
             >
               {images.map((image, i) => {
                 return (
