@@ -14,7 +14,10 @@ export default function Page() {
   const [activeItem, setActiveItem] = useState<null | number>(null);
   const [activeImage, setActiveImage] = useState(0);
   const imageRefs = useRef<HTMLDivElement[] | any>([]);
+  const galleryRef = useRef<HTMLDivElement>(null);
+  const stickyRef = useRef<HTMLDivElement>(null);
   const [activeMobileImage, setActiveMobileImage] = useState(1);
+  const [isSticky, setIsSticky] = useState(false);
 
   const { windowHeight } = useGlobalContext();
 
@@ -39,6 +42,21 @@ export default function Page() {
       });
     }
   };
+
+  const handleSticky = () => {
+    if (!stickyRef.current || !galleryRef.current) return;
+
+    const rect = galleryRef.current.getBoundingClientRect();
+    const windowBottom = window.visualViewport.height;
+
+    const shouldBeSticky = rect.bottom <= windowBottom - 45; // When the bottom of galleryRef is 10px above the window bottom
+
+    setIsSticky(shouldBeSticky);
+  };
+  useEffect(() => {
+    window.addEventListener("scroll", handleSticky);
+    return () => window.removeEventListener("scroll", handleSticky);
+  }, []);
 
   useEffect(() => {
     const observerOptions = {
@@ -79,11 +97,13 @@ export default function Page() {
   return (
     <div className="relative">
       <Menu product />
-      <main className="relative mt-[calc(-100svh+73px)]">
+      <main className="relative  lg:mt-0">
+        {/* LOGO */}
         <div
-          className="w-[calc(100vw/12*2)] px-[10px] grid fixed z-[99] translate-y-[-50%]"
+          className="w-[calc(100vw/12*2)] px-[10px] grid fixed z-[99] translate-y-[-50%]  lg:block"
           style={{
-            top: typeof windowHeight === "number" ? windowHeight / 2 : "50svh",
+            top: "50svh",
+            // typeof windowHeight === "number" ? windowHeight / 2 : "50svh",
           }}
         >
           <div className="pl-[10%] min-w-[180px]">
@@ -92,12 +112,13 @@ export default function Page() {
             </Link>
           </div>
         </div>
-        <div className="grid lg:grid-cols-12 grid-cols-4 lg:px-[10px] gap-x-[10px]">
+
+        {/* DESKTOP PAGE */}
+        <div className="hidden lg:grid lg:grid-cols-12 grid-cols-4 lg:px-[10px] gap-x-[10px]">
           <div
-            className="col-span-5 sticky top-[73px] flex flex-col justify-between px-[10px] lg:px-0 pb-[10px] z-[3] pointer-events-none"
+            className="col-span-5 lg:sticky top-[73px] flex flex-col justify-between px-[10px] lg:px-0 pb-[10px] z-[3] pointer-events-none"
             style={{
-              height:
-                typeof windowHeight === "number" ? windowHeight - 73 : "100svh",
+              height: "calc(100svh - 73px)",
             }}
           >
             <div className="flex justify-between">
@@ -174,7 +195,7 @@ export default function Page() {
             />
           </div>
           <div
-            className="col-span-5 flex flex-col gap-y-[10px] px-[10px] lg:px-0 pb-[10px] lg:!mt-[unset]"
+            className="col-span-5 flex flex-col gap-y-[10px] px-[10px] lg:px-0 pb-[10px] lg:!mt-[0px]"
             style={{
               marginTop:
                 typeof windowHeight === "number"
@@ -204,7 +225,97 @@ export default function Page() {
               );
             })}
           </div>
-          <div className="lg:hidden grid grid-cols-4 col-span-5 mb-[53px] gap-[10px]">
+        </div>
+
+        {/* MOBILE PAGE */}
+        <div className="lg:hidden">
+          <div
+            ref={stickyRef}
+            className={`${
+              isSticky ? "sticky top-[73px]" : "fixed top-[73px]"
+            }  top-[73px] h-[calc(100svh-73px)] flex z-[999] flex-col justify-between pb-[10px] px-[10px] lg:hidden`}
+            style={{
+              height:
+                typeof windowHeight === "number"
+                  ? windowHeight - 73
+                  : "calc(100svh - 73px)",
+            }}
+          >
+            <div className="lg:w-[calc(100vw/12*2)] w-[100%] mt-[40px] lg:ml-0 lg:mt-0 uppercase lg:mt-[calc(50vh-90px)] lg:block">
+              <div className="flex flex-col gap-y-[40px] break-words">
+                <p className="">
+                  Enquire <br />
+                  <a
+                    href="mailto:Enquires@oftheuseless.com"
+                    className="opacity-50 pointer-events-auto"
+                  >
+                    <Typing text="Enquires@oftheuseless.com" />
+                  </a>
+                </p>
+                <p className="ml-[calc(50vw-10px)] lg:ml-0">
+                  Handcrafted in Sweden <br />
+                  LOCALLY SOURCED OAK
+                </p>
+              </div>
+              <div className="mt-[10px] ml-[calc(50vw-10px)] lg:ml-0">
+                <ul className="[&>li>h4]:cursor-pointer">
+                  {siteData.product.info.map((item, i) => {
+                    return (
+                      <li key={item.title} className="overflow-hidden">
+                        <h4
+                          className="pointer-events-auto"
+                          onClick={() => handleClick(i)}
+                        >
+                          {item.title} {activeItem === i ? "-" : "+"}
+                        </h4>
+                        <span
+                          className={`pl-[20px] block ${
+                            activeItem === i
+                              ? "h-auto mb-[15px] mt-[5px]"
+                              : "h-0"
+                          }`}
+                          dangerouslySetInnerHTML={{ __html: item.text }}
+                        />
+                      </li>
+                    );
+                  })}
+                </ul>
+              </div>
+            </div>
+            <Button
+              className="z-[999] pointer-events-auto"
+              link="mailto:info@otu.com"
+              text="enquire|made to order"
+            />
+          </div>
+
+          <div
+            className={`col-span-5 flex flex-col gap-y-[10px] px-[10px] pb-[10px] ${
+              isSticky ? "mt-[calc(-50svh-10px)]" : "mt-[calc(50svh)]"
+            }`}
+          >
+            {images.map((image, i) => {
+              return (
+                <div
+                  key={images[i]}
+                  className={`w-full ${i !== 0 ? "hidden lg:block" : ""}`}
+                  style={{
+                    scrollMarginTop: "73px",
+                  }}
+                >
+                  <CustomImage
+                    src={images[i]}
+                    ratio="2/3"
+                    alt=""
+                    className={`w-full`}
+                    key={images[i]}
+                    priority
+                  />
+                </div>
+              );
+            })}
+          </div>
+          <div className="grid grid-cols-4 col-span-5 mb-[53px] gap-[10px] pb-[53px]">
             <div className="col-span-3 relative">
               {images.map((image, i) => {
                 return (
@@ -231,7 +342,11 @@ export default function Page() {
                 );
               })}
             </div>
-            <div className="col-span-1 relative z-[2] flex flex-col gap-[5px] items-end">
+            <div
+              className="col-span-1 relative z-[2] flex flex-col gap-[5px] items-end"
+              ref={galleryRef}
+              onScroll={(e) => handleSticky(e)}
+            >
               {images.map((image, i) => {
                 return (
                   i !== 0 && (
@@ -260,6 +375,7 @@ export default function Page() {
             </div>
           </div>
         </div>
+
         <div className="grid lg:grid-cols-12 grid-cols-4 gap-[10px] px-[10px] mt-[100px] lg:mt-0">
           <div className="lg:col-span-5 col-span-4 flex flex-col justify-between gap-y-[100px] lg:gap-y-[unset]">
             <div className="w-full flex uppercase">
