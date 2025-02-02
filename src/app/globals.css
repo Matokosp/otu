@@ -9,8 +9,8 @@
 
 @font-face {
   font-family: "Serie";
-  src: url("./assets/fonts/neueSerie57-Medium.woff") format("woff"),
-    url("./assets/fonts/neueSerie57-Medium.woff2") format("woff2");
+  src: url("./assets/fonts/neueSerie57®-Medium.woff") format("woff"),
+    url("./assets/fonts/neueSerie57®-Medium.woff2") format("woff2");
 }
 
 @media (prefers-color-scheme: dark) {
@@ -27,6 +27,14 @@ body {
   font-size: 12px;
   line-height: 13.68px;
   letter-spacing: -2%;
+  background-color: #fffffc;
+
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+a {
+  cursor: pointer !important ;
 }
 
 @keyframes hard-flicker {

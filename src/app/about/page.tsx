@@ -4,10 +4,14 @@ import Menu from "../Components/Menu/Menu";
 const Page = () => {
   return (
     <div className="relative min-h-[calc(100vh-716px)]">
-      <Menu page />
-      <div className="h-[180px]"></div>
+      <Menu page fixed />
+      <div className="lg:h-[180px] h-[160px]"></div>
       <Content
-        text={`<p>A soft and romantic mint inspired by unstained affection and devotion. Amorist gently fuses green mint, peppermint and menthol, resulting in a restrained expression of a true quintessential.</p>`}
+        fixed
+        text={`<p>OF THE USELESS is An independent BRAND based in Stockholm, Sweden.
+we design, handcraft, and produce PIECES for the everyday, with locally sourced materials.</p>
+<br><br>
+<p>unapologetically and down to the last detail.</p>`}
       />
     </div>
   );

@@ -2,45 +2,75 @@ import Content from "../Components/Content/Content";
 import Menu from "../Components/Menu/Menu";
 
 export default function Page() {
-  const texts: { title: string; text: string }[] = [
+  const texts: { title: string; text: string; id: string }[] = [
     {
       title: "Contact",
-      text: "enquires@oftheuseless.com",
+      text: `<a href="mailto:enquires@oftheuseless.com">enquires@oftheuseless.com</a>`,
+      id: "contact",
     },
     {
       title: "Lead times And Shipping",
-      text: "Please allow 6-10 weeks from the time of your order for items to be built. Shipping time and cost will be determined based on item size/weight and distance. An estimated shipping cost can be calculated once destination is known.",
+      text: "Please allow approximately 6–10 weeks for your made-to-order items to be built. shipping time and cost will vary depending on item size, weight, and destination. We can provide an estimated shipping cost once we know your location.",
+      id: "shipping",
     },
     {
       title: "Payments",
-      text: "We accept checks, wire transfers, ACH payments, and credit cards. Please note that there is a 3% processing fee for all credit card transactions. All transactions are secured and encrypted. Prices shown do not include applicable taxes, shipping, or handling charges. Taxes will be calculated and added during the checkout.",
+      text: "All payments are processed securely through Stripe, which supports major credit cards and certain digital wallets. Prices are stated in Euro, with VAT included for EU residents. For Non-EU residents pricing is displayed without VAT.  Prices do not include any applicable taxes, shipping, or handling charges; these will be calculated and added at checkout.",
+      id: "payments",
+    },
+    {
+      title: "Custom Pieces",
+      text: `<p>We offer custom design services. certain in-line pieces are also available for customization.</p>`,
+      id: "customPieces",
     },
     {
       title: "Trade And business clients",
-      text: `<p>Please allow 8-10 weeks from the time of your order for items to be built. Shipping time and cost will be determined based on item size/weight and distance. An estimated shipping cost can be calculated once destination is known.</p>
-          <p style="text-indent:30px">We accept checks, wire transfers, ACH payments, and credit cards. Please note that there is a 3% processing fee for all credit card transactions. All transactions are secured and encrypted. Prices shown do not include applicable taxes, shipping, or handling charges. Taxes will be calculated and added during the checkout.</p>`,
+      text: `<p>We welcome inquiries from trade and business customers and may offer specialized pricing or volume discounts.  We offer custom payment terms, potential minimum order quantities, and tailored logistics solutions for larger or repeat orders. For details on lead times, design approvals, and shipping options, please contact us with your project requirements.</p>`,
+      id: "trade",
     },
     {
       title: "Exchange and Returns",
-      text: `EU Residents<br><br>
-      <p>We accept returns within 14 days, starting from the day your order was delivered. Returned items must comply with our return policy:</p>
-      <p style="text-indent:30px">Items must be returned undamaged and unused, with any tags attached and the original packaging included.</p>
-      <p style="text-indent:30px">Accessories must be returned with the original branded boxes and dust bags, where provided, and placed inside a protective box when returned.</p>
-      <p style="text-indent:30px">Household products must be returned unopened and unused, with the seals of any packaging still intact.</p>
-      <br>
-      <p>Made-to-order items cannot be returned as they have been created to your specification, unless the item arrives damaged or faulty when delivered to you. In this particular case, you must inform us within 72h after receiving your order.</p>
-      <br>
-      <p>Non-EU Residents</p>
-      <br>
-      <p>As a private consumer outside the EU there is no specific jurisdiction controlling your right of regret. But please get in touch with us if you have any remarks, regrets or complaints and we will try to accommodate your request.</p>`,
+      text: `<p>Made-to-order items cannot be returned or exchanged unless they arrive defective or deviate from what was agreed. Standard (non-custom) items for EU residents can be returned within 14 days of delivery if unused and in their original packaging; shipping fees apply. If you receive a defective or incorrect product, please contact us immediately, and we will arrange a replacement, repair, or refund as appropriate.</p>
+      <br />
+      <br />
+      <p>For complete details, please refer to our Terms & Conditions page.</p>
+      `,
+      id: "returns",
+    },
+  ];
+
+  const contentMenu = [
+    {
+      title: "Contact",
+      link: "#contact",
+    },
+    {
+      title: "Lead times & Shipping",
+      link: "#shipping",
+    },
+    {
+      title: "Payments",
+      link: "#payments",
+    },
+    {
+      title: "Custom Pieces",
+      link: "#customPieces",
+    },
+    {
+      title: "Trade And business clients",
+      link: "#Trade",
+    },
+    {
+      title: "Exchange and Returns",
+      link: "#returns",
     },
   ];
 
   return (
     <main className="relative min-h-[calc(100vh-716px)]">
       <Menu page />
-      <div className="h-[180px]"></div>
-      <Content texts={texts} columns={2} />
+      <div className="lg:h-[180px]"></div>
+      <Content texts={texts} columns={2} menu={contentMenu} />
     </main>
   );
 }
