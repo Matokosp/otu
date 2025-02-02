@@ -38,7 +38,7 @@ export default function Page() {
       text: `<p>Of The Useless</p>
       <p>Hantverkargatan 12A</p>
       <p>122 21 Stockholm, Sweden</p>
-      <p>Email: info@oftheuseless.com</p>`,
+      <p>Email: enquires@oftheuseless.com</p>`,
       id: "",
     },
     {
@@ -265,7 +265,7 @@ export default function Page() {
       <br>
       <p>Of The Useless</p>
       <p>Hantverkargatan 12A, 122 21 Stockholm, Sweden</p>
-      <p>Email: <a href="mailto:info@oftheuseless.com">info@oftheuseless.com</a><p>
+      <p>Email: <a href="mailto:enquires@oftheuseless.com">enquires@oftheuseless.com</a><p>
       `,
       id: "",
     },
