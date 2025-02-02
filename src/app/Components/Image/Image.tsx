@@ -4,13 +4,11 @@ export const CustomImage = ({
   ratio,
   src,
   alt = src,
-  priority = false,
   className,
 }: {
   ratio?: string;
   src: string;
   alt?: string;
-  priority?: boolean;
   className?: string;
 }) => {
   const aspectRatio =
