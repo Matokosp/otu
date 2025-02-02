@@ -38,6 +38,7 @@ const Button = ({
         className={`w-full bg-black block text-white p-[10px] uppercase flex justify-between ${className}`}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
+        style={{ WebkitUserSelect: "none" }}
       >
         {/* Render text1 */}
         <span className="flex gap-2">

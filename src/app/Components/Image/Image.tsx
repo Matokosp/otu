@@ -30,6 +30,7 @@ export const CustomImage = ({
       width={width}
       height={height}
       priority
+      quality={100}
     />
   );
 };

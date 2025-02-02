@@ -32,7 +32,7 @@ const Menu = ({
           </Link>
         </p>
         <p className="uppercase lg:col-span-3 text-right lg:text-left pointer-events-auto">
-          <Link href="/product">
+          <Link href="/shop/no-hard-feelings">
             <Typing text="shop" />
           </Link>
         </p>
@@ -44,7 +44,7 @@ const Menu = ({
       </nav>
       {!page && !product && (
         <a
-          href="/product"
+          href="/shop/no-hard-feelings"
           className="grid-cols-4 lg:grid-cols-12 grid gap-x-[10px] p-[10px] block uppercase w-screen absolute bottom-0 pointer-events-auto"
         >
           <div className="lg:col-span-3 col-span-4 hidden lg:block">
