@@ -8,7 +8,10 @@ const Page = () => {
       <div className="lg:h-[180px] h-[160px]"></div>
       <Content
         fixed
-        text={`<p>A soft and romantic mint inspired by unstained affection and devotion. Amorist gently fuses green mint, peppermint and menthol, resulting in a restrained expression of a true quintessential.</p>`}
+        text={`<p>OF THE USELESS is An independent BRAND based in Stockholm, Sweden.
+we design, handcraft, and produce PIECES for the everyday, with locally sourced materials.</p>
+<br><br>
+<p>unapologetically and down to the last detail.</p>`}
       />
     </div>
   );
