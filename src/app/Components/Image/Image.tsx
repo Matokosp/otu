@@ -31,7 +31,7 @@ export const CustomImage = ({
       alt={alt}
       width={width}
       height={height}
-      priority={priority}
+      priority
     />
   );
 };
