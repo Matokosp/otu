@@ -39,6 +39,11 @@ const Footer = () => {
               </Link>
             </li>
           </ul>
+          <ul className="lg:hidden">
+            <li>
+              <Link href={"/about"}>About</Link>
+            </li>
+          </ul>
           <ul>
             <li>
               <Link href={"/terms-and-conditions#privacy"}>
