@@ -17,7 +17,6 @@ export default function Page() {
   const galleryRef = useRef<HTMLDivElement>(null);
   const stickyRef = useRef<HTMLDivElement>(null);
   const [activeMobileImage, setActiveMobileImage] = useState(1);
-  const [isSticky, setIsSticky] = useState(false);
 
   const { windowHeight } = useGlobalContext();
 
