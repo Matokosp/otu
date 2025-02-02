@@ -143,16 +143,16 @@ export const Product = () => {
                     <p>€ 1900</p>
                     <p className={`opacity-50`}>Including VAT</p>
                     <p
-                      className="!select-all"
+                      className="!select-all opacity-50 pointer-events-auto"
                       style={{ WebkitUserSelect: "all" }}
                     >
-                      <a
+                      {/* <a
                         href="mailto:Enquires@oftheuseless.com"
                         className="opacity-50 pointer-events-auto"
-                      >
-                        <Typing text="Enquires@oftheuseless.com" />
-                        {/* Enquires@oftheuseless.com */}
-                      </a>
+                      > */}
+                      {/* <Typing text="Enquires@oftheuseless.com" /> */}
+                      Enquires@oftheuseless.com
+                      {/* </a> */}
                     </p>
                   </div>
                   <p className="ml-[calc(50vw-10px)] lg:ml-0">
