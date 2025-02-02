@@ -16,7 +16,7 @@ const Menu = ({
   return (
     <div
       className={`z-[999] sticky top-0 flex flex-col pointer-events-none w-screen`}
-      style={{ height: !page ? windowHeight : "" }}
+      style={{ height: !page && !product ? windowHeight : "" }}
     >
       <nav className="grid lg:grid-cols-12 grid-cols-4 p-[10px] gap-x-[10px] mb-[25px] w-screen">
         <p className="uppercase col-span-3 pointer-events-auto">
