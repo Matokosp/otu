@@ -5,6 +5,13 @@ import Menu from "./Components/Menu/Menu";
 import Link from "next/link";
 
 export default function Home() {
+  const images = [
+    "/images/home/chair_01.jpg",
+    "/images/home/chair_02.jpg",
+    "/images/home/chair_03.jpg",
+    "/images/home/chair_04.jpg",
+  ];
+
   return (
     <div className="relative">
       <Menu />
@@ -21,7 +28,7 @@ export default function Home() {
             <Link href={"/product"}>
               <CustomImage
                 ratio="4/5"
-                src="/images/heroImage[4_5].png"
+                src={images[0]}
                 alt=""
                 className="w-full"
                 priority
@@ -34,7 +41,7 @@ export default function Home() {
             <Link href={"/product"}>
               <CustomImage
                 ratio="2/3"
-                src="/images/image[2_3].png"
+                src={images[1]}
                 alt=""
                 className="w-full"
               />
@@ -45,7 +52,7 @@ export default function Home() {
             <Link href={"/product"}>
               <CustomImage
                 ratio="4/5"
-                src="/images/image[4_5].png"
+                src={images[2]}
                 alt=""
                 className="w-full"
               />
@@ -57,7 +64,7 @@ export default function Home() {
             <Link href={"/product"}>
               <CustomImage
                 ratio="4/5"
-                src="/images/image[4_5]3.png"
+                src={images[3]}
                 alt=""
                 className="w-full"
               />
@@ -65,8 +72,8 @@ export default function Home() {
           </div>
           <div className="lg:col-start-10 lg:col-end-13 col-span-4 order-1 lg:order-2">
             <p className="uppercase">
-              Like a door opened to winter, fresh ice, burning light, crackling
-              snow, and a warm cooking stove.
+              the climb was tough on his flesh and bones. and yet, he would do
+              it all again.no hard feelings.
             </p>
           </div>
         </div>

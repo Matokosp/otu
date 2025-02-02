@@ -21,10 +21,17 @@ export default function Page() {
   const { windowHeight } = useGlobalContext();
 
   const images = [
-    "/images/chair1.png",
-    "/images/image[2_3].png",
-    "/images/chair2.png",
-    "/images/chair3.png",
+    "/images/product/chair_p_01.jpg",
+    "/images/product/chair_p_02.jpg",
+    "/images/product/chair_p_03.jpg",
+    "/images/product/chair_p_04.jpg",
+  ];
+
+  const thumbnailImages = [
+    "/images/product/chair_xs_01.jpg",
+    "/images/product/chair_xs_02.jpg",
+    "/images/product/chair_xs_03.jpg",
+    "/images/product/chair_xs_04.jpg",
   ];
 
   const handleClick = (i: number) => {
@@ -123,8 +130,8 @@ export default function Page() {
             }}
           >
             <div className="flex justify-between">
-              <div className="w-[calc(100vw/12*0.45)] flex flex-col gap-y-[5px] hidden lg:block">
-                {images.map((image, i) => {
+              <div className="w-[50px] flex flex-col gap-y-[5px] hidden lg:block">
+                {thumbnailImages.map((image, i) => {
                   return (
                     <button
                       className="pointer-events-auto"
@@ -324,13 +331,13 @@ export default function Page() {
               className="col-span-1 relative z-[2] flex flex-col gap-[5px] items-end"
               ref={galleryRef}
             >
-              {images.map((image, i) => {
+              {thumbnailImages.map((image, i) => {
                 return (
                   i !== 0 && (
                     <div
                       onClick={() => setActiveMobileImage(i)}
                       key={images[i]}
-                      className={`w-[60%] top-0 cursor-pointer ${
+                      className={`w-[50px] top-0 cursor-pointer ${
                         activeMobileImage === i ? "opacity-100" : "opacity-50"
                       }`}
                       style={{
@@ -384,7 +391,7 @@ export default function Page() {
             </p>
             <CustomImage
               alt=""
-              src={"/images/image[5_4]4.png"}
+              src={"/images/product/oak_sample_image.jpg"}
               ratio={"5/4"}
               className="w-full"
             />
