@@ -47,7 +47,9 @@ export default function Page() {
     if (!stickyRef.current || !galleryRef.current) return;
 
     const rect = galleryRef.current.getBoundingClientRect();
-    const windowBottom = window.visualViewport.height;
+    const windowBottom = window.visualViewport
+      ? window.visualViewport.height
+      : window.innerHeight;
 
     const shouldBeSticky = rect.bottom <= windowBottom - 45; // When the bottom of galleryRef is 10px above the window bottom
 
@@ -345,7 +347,7 @@ export default function Page() {
             <div
               className="col-span-1 relative z-[2] flex flex-col gap-[5px] items-end"
               ref={galleryRef}
-              onScroll={(e) => handleSticky(e)}
+              onScroll={(e) => handleSticky()}
             >
               {images.map((image, i) => {
                 return (
