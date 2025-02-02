@@ -20,8 +20,8 @@ export const CustomImage = ({
       ? "aspect-[5/4]"
       : "";
 
-  const width = ratio === "4/5" ? 400 : ratio === "2/3" ? 200 : 500;
-  const height = ratio === "4/5" ? 500 : ratio === "2/3" ? 300 : 400;
+  const width = ratio === "4/5" ? 800 : ratio === "2/3" ? 400 : 1000;
+  const height = ratio === "4/5" ? 1000 : ratio === "2/3" ? 600 : 800;
   return (
     <Image
       className={`${aspectRatio} ${className}`}

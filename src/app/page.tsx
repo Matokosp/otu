@@ -1,8 +1,29 @@
-"use client";
-
+import { Metadata } from "next";
 import { CustomImage } from "./Components/Image/Image";
 import Menu from "./Components/Menu/Menu";
 import Link from "next/link";
+
+export const metadata: Metadata = {
+  title: "OF THE USELESS",
+  description:
+    "OF THE USELESS is an independent brand based in Stockholm, Sweden. We design, handcraft, and produce pieced for the everyday, with locally sourced materials. Unapologetically and down to the last detail.",
+  icons: {
+    icon: "/images/icon/favicon.ico",
+    apple: "/images/icon/apple-touch-icon.png",
+  },
+  openGraph: {
+    url: "https://oftheuseless.com",
+    title: "OF THE USELESS",
+    description:
+      "OF THE USELESS is an independent brand based in Stockholm, Sweden. We design, handcraft, and produce pieced for the everyday, with locally sourced materials. Unapologetically and down to the last detail.",
+    siteName: "OF THE USELESS",
+    images: [
+      {
+        url: "/images/meta/hero_image.jpg",
+      },
+    ],
+  },
+};
 
 export default function Home() {
   const images = [
@@ -35,7 +56,7 @@ export default function Home() {
             </Link>
           </div>
         </div>
-        <div className="grid-cols-4 lg:grid-cols-12 grid mt-[10px] gap-[10px]">
+        <div className="grid-cols-4 lg:grid-cols-12 grid mt-[10px] gap-[10px] overflow-hidden">
           <div className="col-span-3 lg:col-start-1 lg:col-end-8">
             <Link href={"/shop/no-hard-feelings"}>
               <CustomImage
