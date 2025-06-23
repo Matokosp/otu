@@ -140,7 +140,7 @@ export const Product = () => {
                     OILED OAK
                   </p>
                   <div>
-                    <p>€ 1900</p>
+                    <p>€ 2300</p>
                     <p className={`opacity-50`}>Including VAT</p>
                     <p
                       className="!select-all opacity-50 pointer-events-auto"
@@ -232,7 +232,7 @@ export const Product = () => {
             <div className="w-[100%] mt-[40px] uppercase">
               <div className="flex flex-col gap-y-[40px] break-words ml-[calc(50vw-10px)] lg:ml-0">
                 <div>
-                  <p>€ 1900</p>
+                  <p>€ 2300</p>
                   <p className={`opacity-50`}>Including VAT</p>
                 </div>
                 <p className="">
