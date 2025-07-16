@@ -92,7 +92,7 @@ export default function Home() {
           </div>
           <div className="lg:col-start-10 lg:col-end-13 col-span-4 order-1 lg:order-2">
             <p className="uppercase">
-              like a door opened to winter, fresh ice, burning light, crackling
+              Like a door open to winter, fresh ice, burning light, crackling
               snow, a warm cooking stove.
             </p>
           </div>
