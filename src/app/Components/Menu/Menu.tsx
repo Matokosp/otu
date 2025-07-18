@@ -22,13 +22,13 @@ const Menu = ({
         <p className="uppercase col-span-3 pointer-events-auto">
           <Link className="lg:hidden" href={"/"}>
             {product ? (
-              <Typing text="no hard feelings chair <br> — oiled oak" />
+              <Typing text="No hard feelings chair <br> — oiled oak" />
             ) : (
-              <Typing text="release 01 <br> — Stockholm, Sweden" />
+              <Typing text="Spring Summer '25 <br> — Stockholm, Sweden" />
             )}
           </Link>
           <Link className="hidden lg:block" href={"/"}>
-            <Typing text="release 01 <br> — Stockholm, Sweden" />
+            <Typing text="Spring Summer '25 <br> — Stockholm, Sweden" />
           </Link>
         </p>
         <p className="uppercase lg:col-span-3 text-right lg:text-left pointer-events-auto">
