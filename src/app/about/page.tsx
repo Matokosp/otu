@@ -8,10 +8,10 @@ const Page = () => {
       <div className="lg:h-[180px] h-[160px]"></div>
       <Content
         fixed
-        text={`<p>OF THE USELESS is An independent BRAND based in Stockholm, Sweden.
-we design, handcraft, and produce PIECES for the everyday, with locally sourced materials.</p>
+        text={`<p>OF THE USELESS is an independent brand based in Stockholm, Sweden.
+we design, handcraft, and produce pieces for the everyday, with locally sourced materials.</p>
 <br><br>
-<p>unapologetically and down to the last detail.</p>`}
+<p>Unapologetically and down to the last detail.</p>`}
       />
     </div>
   );
