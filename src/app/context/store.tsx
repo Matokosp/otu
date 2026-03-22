@@ -21,6 +21,8 @@ interface ContextProps {
   isCustomCursor: string | null;
   setIsCustomCursor: Dispatch<SetStateAction<string | null>>;
   windowHeight: number | string;
+  isFilteredShop: string | null;
+  setIsFilteredShop: Dispatch<SetStateAction<string | null>>;
 }
 
 const GlobalContext = createContext<ContextProps>({
@@ -32,6 +34,8 @@ const GlobalContext = createContext<ContextProps>({
   isCustomCursor: null,
   setIsCustomCursor: (): void => {},
   windowHeight: 0,
+  isFilteredShop: null,
+  setIsFilteredShop: (): void => {},
 });
 
 export const GlobalContextProvider = ({ children }: any) => {
@@ -40,6 +44,7 @@ export const GlobalContextProvider = ({ children }: any) => {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [isCustomCursor, setIsCustomCursor] = useState<string | null>(null);
   const [windowHeight, setWindowHeight] = useState<string | number>("100svh");
+  const [isFilteredShop, setIsFilteredShop] = useState<string | null>(null);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -100,6 +105,8 @@ export const GlobalContextProvider = ({ children }: any) => {
         isCustomCursor,
         setIsCustomCursor,
         windowHeight,
+        isFilteredShop,
+        setIsFilteredShop,
       }}
     >
       {children}
