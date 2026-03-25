@@ -32,12 +32,12 @@ export default async function Page() {
 
     return (
         <main className="relative">
-            <Menu page />
+            <Menu page shop />
             {/* LOGO */}
             <div
-                className="w-[calc(100vw/12*2)] px-[10px] grid fixed z-[99] translate-y-[-50%] lg:block"
+                className="w-[calc(100vw/12*2)] px-[10px] grid fixed z-[99] translate-y-[-50%] lg:block top-[50svh]"
                 style={{
-                    top: "50svh",
+                    // top: "lg:50svh"
                 }}
             >
                 <div className="pl-[10%] min-w-[180px]">
@@ -47,16 +47,16 @@ export default async function Page() {
                 </div>
             </div>
 
-            <div className="mt-[calc(-100px+50vh)]" />
+            <div className="lg:mt-[calc(-100px+50vh)] mt-[calc(50vh)]" />
 
-            <div className="flex flex-col gap-y-[165px]">
+            <div className="flex flex-col lg:gap-y-[165px] gap-y-[100px]">
                 <HighlightedProduct products={allProducts} />
 
                 {/* ALL PRODUCTS */}
                 <div>
-                    <div className="grid grid-cols-1 gap-4 lg:grid-cols-3 px-4 mb-[10px]">
+                    <div className="grid grid-cols-1 gap-[10px] lg:grid-cols-3 px-[10px] mb-[10px]">
                         <div className="col-span-1 lg:col-start-2 flex items-center">
-                            <p>NO HARD FEELINGS IS CRAFTED FROM LOCALLY SOURCED SWEDISH OAK, CHOSEN FOR ITS NATURAL CHARM AND DURABILITY. EACH PIECE REFLECTS THE LEGACY OF ITS TREE, REVEALED IN UNIQUE AND EXPRESSIVE GRAIN PATTERNS .</p>
+                            <p className="uppercase">NO HARD FEELINGS IS CRAFTED FROM LOCALLY SOURCED SWEDISH OAK, CHOSEN FOR ITS NATURAL CHARM AND DURABILITY. EACH PIECE REFLECTS THE LEGACY OF ITS TREE, REVEALED IN UNIQUE AND EXPRESSIVE GRAIN PATTERNS.</p>
                         </div>
                     </div>
                     <ProductGrid products={allProducts} />

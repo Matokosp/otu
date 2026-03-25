@@ -3,52 +3,69 @@
 import Link from "next/link";
 import { useGlobalContext } from "@/app/context/store";
 import { Typing } from "../Typing/Typing";
+import { Cart } from "../Cart/Cart";
+import { useState } from "react";
 
 const Menu = ({
   page,
   product,
+  shop
 }: {
   page?: boolean;
   product?: boolean;
   fixed?: boolean;
+  shop?: boolean;
 }) => {
-  const { windowHeight, setIsFilteredShop, isFilteredShop } = useGlobalContext();
+  const [cartOpen, setCartOpen] = useState(false);
+
+  const { windowHeight, setIsFilteredShop, isFilteredShop, cartCount, refreshCartCount } = useGlobalContext();
+
+  const handleCartClose = () => {
+    setCartOpen(false);
+    refreshCartCount();
+  };
+
   return (
     <div
       className={`z-[999] sticky top-0 flex flex-col pointer-events-none w-screen`}
       style={{ height: !page && !product ? windowHeight : "" }}
     >
+      <Cart isOpen={cartOpen} onClose={handleCartClose} />
       <nav className="grid lg:grid-cols-12 grid-cols-4 p-[10px] gap-x-[10px] mb-[25px] w-screen">
-        <p className="uppercase col-span-3 pointer-events-auto">
-          <Link className="lg:hidden" href={"/"}>
+        <p className="uppercase col-span-3 pointer-events-auto hidden lg:block">
+          {/* <Link className="lg:hidden" href={"/"}>
             {product ? (
               <Typing text="no hard feelings chair <br> — oiled oak" />
             ) : (
               <Typing text="release 01 <br> — Stockholm, Sweden" />
             )}
-          </Link>
+          </Link> */}
           <Link className="hidden lg:block" href={"/"}>
             <Typing text="release 01 <br> — Stockholm, Sweden" />
           </Link>
         </p>
-        <div className="relative group">
-          <p onClick={() => setIsFilteredShop(null)} className="uppercase lg:col-span-3 text-right lg:text-left pointer-events-auto relative">
+        <div className="relative group lg:col-span-3">
+          <p onClick={() => setIsFilteredShop(null)} className="uppercase pointer-events-auto relative">
             <Link href="/shop">
               <Typing text="shop" />
             </Link>
           </p>
-
-          <div className="absolute left-0 pt-[50px] opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto transition">
+          {!product && (
+            <div className={`absolute left-[calc(50vw-5px)] lg:left-0 pt-[50px] ${shop ? 'opacity-100' : 'opacity-0'} lg:pointer-events-auto pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto transition`}>
             <p className={`${isFilteredShop === null ? 'text-black' : 'text-gray-400 hover:text-black'}`} onClick={() => setIsFilteredShop(null)}><Link href="/shop">ALL</Link></p>
             <p className={`${isFilteredShop === 'Furniture' ? 'text-black' : 'text-gray-400 hover:text-black'}`} onClick={() => setIsFilteredShop('Furniture')}><Link href="/shop">FURNITURE</Link></p>
             <p className={`${isFilteredShop === 'Objects' ? 'text-black' : 'text-gray-400 hover:text-black'}`} onClick={() => setIsFilteredShop('Objects')}><Link href="/shop">OBJECTS</Link></p>
             <p className={`${isFilteredShop === 'Found & Antiques' ? 'text-black' : 'text-gray-400 hover:text-black'}`} onClick={() => setIsFilteredShop('Found & Antiques')}><Link href="/shop">ANTIQUE</Link></p>
           </div>
+          )}
         </div>
         <p className="uppercase col-span-3 pointer-events-auto hidden lg:block">
           <Link href="/about">
             <Typing text="about" />
           </Link>
+        </p>
+        <p onClick={() => setCartOpen(true)} className="uppercase col-span-3 pointer-events-auto cursor-pointer text-right lg:text-left">
+          cart {cartCount > 0 ? ` [${cartCount}]` : "[0]"}
         </p>
       </nav>
       {!page && !product && (

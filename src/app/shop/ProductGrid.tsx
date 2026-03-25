@@ -20,19 +20,29 @@ export const ProductGrid = ({ products }: { products?: ShopifyProduct[] }) => {
         handle: undefined as string | undefined,
         images: Array.from({ length: 4 }).map(() => "/images/chair1.png"),
         price: "€ 3.500",
+        metafields: {
+            plp_images: Array.from({ length: 4 }).map(() => "/images/placeholder.png")
+        },
+        availableForSale: true,
     }));
 
-    const cells: { productIndex: number; imageIndex: number; imageUrl?: string }[] = [];
+    const cells: { productIndex: number; imageIndex: number; imageUrl?: string; isExtra: boolean }[] = [];
+
     fallback.forEach((p, i) => {
         const span = pattern[i % pattern.length];
         const imagesCount = span === 4 ? 4 : 2;
         for (let j = 0; j < imagesCount; j++) {
-            cells.push({ productIndex: i, imageIndex: j, imageUrl: p.metafields?.plp_images?.[j] });
+            cells.push({
+                productIndex: i,
+                imageIndex: j,
+                imageUrl: p.metafields?.plp_images?.[j],
+                isExtra: j >= 2 // images 3 & 4 are extras, hidden on mobile
+            });
         }
     });
 
     return (
-        <div className="grid grid-cols-6 gap-x-[10px] gap-y-[25px] px-4">
+        <div className="grid grid-cols-2 lg:grid-cols-6 gap-x-[10px] gap-y-[25px] px-[10px]">
             {cells.map((c) => {
                 const p = fallback[c.productIndex];
                 const isFirstImageOfProduct = c.imageIndex === 0;
@@ -40,7 +50,10 @@ export const ProductGrid = ({ products }: { products?: ShopifyProduct[] }) => {
                 const img = c.imageUrl || "/images/placeholder.png";
 
                 return (
-                    <div key={`${c.productIndex}-${c.imageIndex}`} className="relative">
+                    <div
+                        key={`${c.productIndex}-${c.imageIndex}`}
+                        className={`relative ${c.isExtra ? "hidden lg:block" : ""}`}
+                    >
                         <div className="aspect-[228/343] relative overflow-hidden">
                             {p.handle ? (
                                 <Link href={`/products/${p.handle}`}>
@@ -55,10 +68,10 @@ export const ProductGrid = ({ products }: { products?: ShopifyProduct[] }) => {
                             )}
                         </div>
                         {isFirstImageOfProduct && (
-                            <p className="mt-2 z-2 text-black">{p.title}</p>
+                            <p className="mt-2 z-2 text-black uppercase">{p.title}</p>
                         )}
                         {isSecondImageOfProduct && (
-                            <p className="mt-2 z-2 text-black">{p.price}</p>
+                            <p className="mt-2 z-2 text-black text-right lg:text-left flex justify-between"><span className="uppercase text-[rgba(0,0,0,0.5)]">{!p.availableForSale ? 'out of stock' : ''}</span>{p.price}</p>
                         )}
                     </div>
                 );
@@ -75,32 +88,34 @@ export const HighlightedProduct = ({ products }: { products?: ShopifyProduct[] }
             .filter((product) => Array.isArray(product.tags) && product.tags.includes("Featured"))
             .map((product: ShopifyProduct) => (
                 <Link href={`/products/${product.handle}`} key={product.id}>
-                    <div>
-                        <div className="grid grid-cols-1 gap-4 lg:grid-cols-3 px-4 mb-[10px]">
-                            <div className="col-span-1 lg:col-start-2 flex items-center">
-                                <p>NO HARD FEELINGS IS CRAFTED FROM LOCALLY SOURCED SWEDISH OAK, CHOSEN FOR ITS NATURAL CHARM AND DURABILITY. EACH PIECE REFLECTS THE LEGACY OF ITS TREE, REVEALED IN UNIQUE AND EXPRESSIVE GRAIN PATTERNS .</p>
+                    <div className="grid grid-cols-1 gap-[10px] lg:grid-cols-3 px-[10px] mb-[10px]">
+                        <div className="col-span-1 lg:col-start-2 flex items-center">
+                            <p className="uppercase">{product.metafields?.description_long}</p>
+                        </div>
+                    </div>
+                    <div className="grid grid-cols-2 gap-[10px] md:grid-cols-3 lg:grid-cols-6 px-[10px]">
+                        {product.metafields?.plp_images?.map((img, i) => (
+                            <div key={i} className="aspect-[228/343] relative">
+                                <CustomImage
+                                    alt=""
+                                    src={img}
+                                    className="w-full h-full object-cover"
+                                />
+                                {i === 0 && (
+                                    <p className="hidden lg:block absolute mt-[10px] left-0">{product.title}</p>
+                                )}
+                                {i === 1 && (
+                                    <p className="hidden lg:block absolute mt-[10px] left-0">{product.price}</p>
+                                )}
+                                {i === 2 && (
+                                    <p className="hidden lg:block absolute mt-[10px] left-0">HANDCRAFTED IN SWEDEN</p>
+                                )}
                             </div>
-                        </div>
-                        <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-6 px-4">
-                            {[...Array(6)].map((_, i) => (
-                                <div key={i} className="aspect-[228/343] relative">
-                                    <CustomImage
-                                        alt=""
-                                        src="/images/chair1.png"
-                                        className="w-full h-full object-cover"
-                                    />
-                                    {i === 0 && (
-                                        <p className="absolute mt-[10px] left-0">{product.title}</p>
-                                    )}
-                                    {i === 1 && (
-                                        <p className="absolute mt-[10px] left-0">{product.price}</p>
-                                    )}
-                                    {i === 2 && (
-                                        <p className="absolute mt-[10px] left-0">HANDCRAFTED IN SWEDEN</p>
-                                    )}
-                                </div>
-                            ))}
-                        </div>
+                        ))}
+                    </div>
+                    <div className="flex justify-between px-[10px] mt-[10px] lg:hidden">
+                        <p className="uppercase">{product.title}</p>
+                        <p>{product.price}</p>
                     </div>
                 </Link>
             ))

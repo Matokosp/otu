@@ -21,6 +21,7 @@ type ShopifyProduct = {
   quantityAvailable?: number | null;
   availableForSale?: boolean | null;
   currentlyNotInStock?: boolean | null;
+  variantId?: string | null;
 };
 
 async function storefront(query: string, variables?: Record<string, any>, options?: { revalidate?: number }) {
@@ -34,7 +35,7 @@ async function storefront(query: string, variables?: Record<string, any>, option
   // Dev helper: optionally skip TLS verification when running behind a proxy
   if (process.env.SKIP_TLS_VERIFY === "true") {
     // eslint-disable-next-line no-console
-    console.warn("SKIP_TLS_VERIFY=true — disabling TLS certificate verification for outgoing requests (dev only)");
+    // console.warn("SKIP_TLS_VERIFY=true — disabling TLS certificate verification for outgoing requests (dev only)");
     // disable Node TLS verification (dev only)
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
@@ -65,12 +66,12 @@ async function storefront(query: string, variables?: Record<string, any>, option
     if (json && json.data && json.data.products && Array.isArray(json.data.products.nodes) && json.data.products.nodes.length === 0) {
       // Print a concise debug message to server logs — safe (no token)
       // eslint-disable-next-line no-console
-      console.debug("Shopify storefront: products empty response", {
-        url,
-        querySnippet: String(query).slice(0, 200),
-        variables: variables ? Object.keys(variables) : undefined,
-        data: json.data,
-      });
+      // console.debug("Shopify storefront: products empty response", {
+      //   url,
+      //   querySnippet: String(query).slice(0, 200),
+      //   variables: variables ? Object.keys(variables) : undefined,
+      //   data: json.data,
+      // });
     }
   } catch (e) {
     // ignore logging errors
@@ -91,7 +92,7 @@ export async function getProducts(first = 8): Promise<ShopifyProduct[]> {
           tags
           metafields
           images(first: 4) { nodes { url } }
-          variants(first: 1) { nodes { priceV2 { amount currencyCode } } }
+          variants(first: 1) { nodes { price { amount currencyCode } } }
         }
       }
     }
@@ -159,7 +160,18 @@ export async function getAllProducts(): Promise<ShopifyProduct[]> {
           }
           collections(first: $first, after: $after) { nodes { title id } }
           images(first: 4) { nodes { url } }
-          variants(first: 1) { nodes { priceV2 { amount currencyCode } } }
+          variants(first: 1) {
+            nodes {
+              id
+              price {
+                amount
+                currencyCode
+              }
+              availableForSale
+              quantityAvailable
+              currentlyNotInStock
+            }
+          }
         }
         pageInfo { hasNextPage endCursor }
       }
@@ -201,9 +213,12 @@ export async function getAllProducts(): Promise<ShopifyProduct[]> {
           description_long_image: p.metafields?.filter((m: any) => m?.key === "description_long_image")[0]?.nodes?.[0]?.image?.url,
         },
         price:
-          p.variants?.nodes?.[0]?.priceV2?.amount && p.variants?.nodes?.[0]?.priceV2?.currencyCode
-            ? `${p.variants.nodes[0].priceV2.amount} ${p.variants.nodes[0].priceV2.currencyCode}`
+          p.variants?.nodes?.[0]?.price?.amount && p.variants?.nodes?.[0]?.price?.currencyCode
+            ? `${p.variants.nodes[0].price.amount} ${p.variants.nodes[0].price.currencyCode}`
             : undefined,
+        quantityAvailable: p.variants?.nodes?.[0]?.quantityAvailable,
+        availableForSale: p.variants?.nodes?.[0]?.availableForSale,
+        currentlyNotInStock: p.variants?.nodes?.[0]?.currentlyNotInStock,
       });
     });
 
@@ -266,7 +281,8 @@ export async function getProductByHandle(handle: string, revalidate = 60): Promi
         images(first: 8) { nodes { url } }
         variants(first: 1) {
           nodes {
-            priceV2 {
+            id
+            price {
               amount
               currencyCode
             }
@@ -291,9 +307,10 @@ export async function getProductByHandle(handle: string, revalidate = 60): Promi
 
 
   if (!p) return null;
-  console.log(p)
+
   return {
     id: p.id,
+    variantId: p.variants?.nodes?.[0]?.id,
     title: p.title,
     handle: p.handle,
     images: (p.images?.nodes || []).map((n: any) => n.url),
@@ -310,8 +327,8 @@ export async function getProductByHandle(handle: string, revalidate = 60): Promi
       shipping: p.metafields?.filter((m: any) => m?.key === "shipping")[0]?.value,
       description_long: p.metafields?.filter((m: any) => m?.key === "description_long")[0]?.value,
       description_long_image: {
-        url:p.metafields?.filter((m: any) => m?.key === "description_long_image")[0]?.reference?.image.url,
-        altText:p.metafields?.filter((m: any) => m?.key === "description_long_image")[0]?.reference?.image.altText,
+        url: p.metafields?.filter((m: any) => m?.key === "description_long_image")[0]?.reference?.image.url,
+        altText: p.metafields?.filter((m: any) => m?.key === "description_long_image")[0]?.reference?.image.altText,
       },
     },
     price:

@@ -16,7 +16,7 @@ export default function RootLayout({
           {children}
           <Footer />
         </GlobalContextProvider>
-        <Analytics />
+        {/* <Analytics /> */}
       </body>
     </html>
   );

@@ -8,11 +8,14 @@ import Button from "../../Components/Button/Button";
 import { useGlobalContext } from "@/app/context/store";
 import { Typing } from "../../Components/Typing/Typing";
 
+const CART_ID_KEY = "shopify_cart_id";
+
 type ProductData = {
   title?: string;
   price?: string;
   images?: string[];
   thumbnailImages?: string[];
+  variantId?: string | null;
   metafields: {
     plp_images?: string[];
     material_and_finish?: string;
@@ -23,7 +26,7 @@ type ProductData = {
     care?: string;
     shipping?: string;
     description_long?: string;
-    description_long_image?: { url: string; altText: string};
+    description_long_image?: { url: string; altText: string };
   } | null;
   productAvailable?: boolean | null;
   quantityAvailable?: number | null;
@@ -35,16 +38,78 @@ export const Product = ({ productData }: { productData?: ProductData }) => {
   const [activeImage, setActiveImage] = useState(0);
   const imageRefs = useRef<HTMLDivElement[] | any>([]);
   const [activeMobileImage, setActiveMobileImage] = useState(1);
+  const [isAddingToCart, setIsAddingToCart] = useState(false);
+  const [addedToCart, setAddedToCart] = useState(false);
 
-  const { windowHeight } = useGlobalContext();
+  const { windowHeight, refreshCartCount } = useGlobalContext();
 
   const images = productData?.images && productData.images.length > 0 ? productData.images : [];
-  const thumbnailImages = productData?.thumbnailImages && productData.thumbnailImages.length > 0 ? productData.thumbnailImages : [];
+  const thumbnailImages = productData?.images && productData.images.length > 0 ? productData.images : [];
+
+  const isMadeToOrder = productData?.quantityAvailable === 0 && productData?.availableForSale === true;
+  const soldOut = productData?.availableForSale === false;
+  const variantId = productData?.variantId ?? "";
+
+  const getButtonText = () => {
+    if (isAddingToCart) return "adding...|adding...";
+    if (addedToCart) return "added|added to cart";
+    if (soldOut) return "out of stock|out of stock";
+    if (isMadeToOrder) return "enquire|made to order";
+    return "in stock|add to cart";
+  };
+
+  const handleAddToCart = async () => {
+    if (isMadeToOrder || soldOut || isAddingToCart || !variantId) return;
+
+    setIsAddingToCart(true);
+    try {
+      const existingCartId = localStorage.getItem(CART_ID_KEY);
+
+      if (existingCartId) {
+        const res = await fetch("/api/cart", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ action: "add", cartId: existingCartId, variantId, quantity: 1 }),
+        });
+        const result = await res.json();
+
+        if (result.userErrors?.length > 0) {
+          const res2 = await fetch("/api/cart", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ action: "create", variantId, quantity: 1 }),
+          });
+          const newResult = await res2.json();
+          if (newResult.cart?.id) {
+            localStorage.setItem(CART_ID_KEY, newResult.cart.id);
+          }
+        }
+      } else {
+        const res = await fetch("/api/cart", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ action: "create", variantId, quantity: 1 }),
+        });
+        const result = await res.json();
+        if (result.cart?.id) {
+          localStorage.setItem(CART_ID_KEY, result.cart.id);
+        }
+      }
+
+      setAddedToCart(true);
+      refreshCartCount();
+      setTimeout(() => setAddedToCart(false), 2000);
+    } catch (error) {
+      console.error("Error adding to cart:", error);
+    } finally {
+      setIsAddingToCart(false);
+    }
+  };
+
   const handleClick = (i: number) => {
     setActiveItem(activeItem === i ? null : i);
   };
 
-  console.log(productData)
   const productInfo = [
     {
       "title": "Dimensions",
@@ -62,7 +127,7 @@ export const Product = ({ productData }: { productData?: ProductData }) => {
       "title": "Shipping",
       "text": productData?.metafields?.shipping ? `<p>${productData.metafields.shipping}</p>` : ""
     }
-  ]
+  ];
 
   const handleImageButtonClick = (i: number) => {
     setActiveImage(i);
@@ -111,6 +176,38 @@ export const Product = ({ productData }: { productData?: ProductData }) => {
     };
   }, []);
 
+  const renderButton = () => {
+
+    if (soldOut) {
+      return (
+        <Button
+          className="z-[999] pointer-events-auto opacity-50"
+          disabled
+          text="out of stock|out of stock"
+        />
+      );
+    }
+
+    if (isMadeToOrder) {
+      return (
+        <Button
+          className="z-[999] pointer-events-auto"
+          link="mailto:enquires@oftheuseless.com"
+          text="enquire|made to order"
+        />
+      );
+    }
+
+    return (
+      <Button
+        className="z-[999] pointer-events-auto"
+        text={getButtonText()}
+        onClick={() => handleAddToCart()}
+        disabled={isAddingToCart}
+      />
+    );
+  };
+
   return (
     <>
       <Menu product />
@@ -152,6 +249,7 @@ export const Product = ({ productData }: { productData?: ProductData }) => {
                         alt=""
                         className={`w-full ${activeImage === i ? "opacity-100" : "opacity-50"
                           }`}
+                          quality={80}
                       />
                     </button>
                   );
@@ -205,19 +303,7 @@ export const Product = ({ productData }: { productData?: ProductData }) => {
                 </div>
               </div>
             </div>
-            {
-              productData?.quantityAvailable === 0 && productData?.availableForSale === true ?
-                <Button
-                  className="z-[999] pointer-events-auto"
-                  link="mailto:enquires@oftheuseless.com"
-                  text="enquire|made to order"
-                /> :
-                <Button
-                  className="z-[999] pointer-events-auto"
-                  link="mailto:enquires@oftheuseless.com"
-                  text="in stock|add to cart"
-                />
-            }
+            {renderButton()}
           </div>
           <div
             className="col-span-5 flex flex-col gap-y-[10px] px-[10px] lg:px-0 pb-[10px] lg:!mt-[0px]"
@@ -359,6 +445,7 @@ export const Product = ({ productData }: { productData?: ProductData }) => {
                         alt=""
                         className={`w-full`}
                         key={images[i]}
+                        quality={50}
                       />
                     </div>
                   )
@@ -366,19 +453,7 @@ export const Product = ({ productData }: { productData?: ProductData }) => {
               })}
             </div>
           </div>
-          {
-            productData?.quantityAvailable === 0 && productData?.availableForSale === true ?
-              <Button
-                className="z-[999] pointer-events-auto"
-                link="mailto:enquires@oftheuseless.com"
-                text="enquire|made to order"
-              /> :
-              <Button
-                className="z-[999] pointer-events-auto"
-                link="mailto:enquires@oftheuseless.com"
-                text="in stock|add to cart"
-              />
-          }
+          {renderButton()}
           <p className="px-[10px] mt-[10px] uppercase">
             <a
               href="mailto:Enquires@oftheuseless.com"
