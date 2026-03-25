@@ -182,17 +182,15 @@ export const Cart = ({
     <>
       {/* Overlay */}
       <div
-        className={`fixed inset-0 bg-black/50 z-[998] transition-opacity duration-300 ${
-          isOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
-        }`}
+        className={`fixed inset-0 bg-black/50 z-[998] transition-opacity duration-300 ${isOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
+          }`}
         onClick={onClose}
       />
 
       {/* Drawer */}
       <div
-        className={`[&_*]:text-[12px] fixed top-0 right-0 h-full z-[999] pointer-events-auto bg-white flex flex-col transition-transform duration-300 ease-in-out ${
-          isOpen ? "translate-x-0" : "translate-x-full"
-        } w-full lg:w-[50vw]`}
+        className={`[&_*]:text-[12px] fixed top-0 right-0 h-full z-[999] pointer-events-auto bg-white flex flex-col transition-transform duration-300 ease-in-out ${isOpen ? "translate-x-0" : "translate-x-full"
+          } w-full lg:w-[50vw]`}
       >
         {/* Header */}
         <div className="grid grid-cols-6 gap-[10px] px-[10px] py-[10px] uppercase text-sm">
@@ -210,7 +208,7 @@ export const Cart = ({
           ) : lines.length === 0 ? (
             <p className="uppercase text-sm opacity-50">Your cart is empty</p>
           ) : (
-            <div className="flex flex-col gap-y-[10px]">
+            <div className="flex flex-col gap-y-[40px] lg:gap-y-[10px]">
               {lines.map((line, index) => {
                 const isUpdating = updatingLines.has(line.id);
                 const itemPrice = parseFloat(line.merchandise.priceV2.amount) * line.quantity;
@@ -222,72 +220,75 @@ export const Cart = ({
                     className={`uppercase text-sm ${isUpdating ? "opacity-50" : ""}`}
                   >
                     {/* Mobile layout */}
-                    <div className="lg:hidden">
-                      <p className="mb-[10px]">
-                        {String(index + 1).padStart(2, "0")}
-                      </p>
-                      {line.merchandise.image?.url && (
-                        <div className="w-full mb-[15px]">
+                    <div className="lg:hidden grid grid-cols-4 gap-x-[10px]">
+                      {/* Row 1: Index in col 1, Image in cols 2-5 */}
+                      <div className="col-span-1">
+                        <p>{String(index + 1).padStart(2, "0")}</p>
+                      </div>
+                      <div className="col-span-2">
+                        {line.merchandise.image?.url && (
                           <CustomImage
                             src={line.merchandise.image.url}
                             alt={line.merchandise.image.altText ?? ""}
                             ratio="2/3"
                             className="w-full"
                           />
-                        </div>
-                      )}
-                      <div className="grid grid-cols-6 gap-[10px]">
-                        <div className="col-span-2 flex flex-col gap-y-[2px] opacity-50">
-                          <p>Item</p>
-                          <p>Finish</p>
-                        </div>
-                        <div className="col-span-4 flex flex-col gap-y-[2px]">
-                          <p>{line.merchandise.product.title}</p>
-                          <p>{finish}</p>
-                        </div>
+                        )}
+                      </div>
+                      <div className="col-span-1" />
 
-                        <div className="col-span-2 flex flex-col gap-y-[2px] opacity-50 mt-[10px]">
-                          <p>Qty</p>
-                          <p>Subtotal</p>
-                        </div>
-                        <div className="col-span-2 flex flex-col gap-y-[2px] mt-[10px]">
-                          <div className="flex items-center gap-x-[10px]">
-                            <button
-                              onClick={() =>
-                                updateQuantity(line.id, Math.max(1, line.quantity - 1))
-                              }
-                              disabled={isUpdating || line.quantity <= 1}
-                              className="opacity-50 hover:opacity-100"
-                            >
-                              -
-                            </button>
-                            <span>{line.quantity}</span>
-                            <button
-                              onClick={() =>
-                                updateQuantity(line.id, line.quantity + 1)
-                              }
-                              disabled={isUpdating}
-                              className="opacity-50 hover:opacity-100"
-                            >
-                              +
-                            </button>
-                          </div>
-                          <p>
-                            {formatPrice(
-                              String(itemPrice),
-                              line.merchandise.priceV2.currencyCode
-                            )}
-                          </p>
-                        </div>
-                        <div className="col-span-2 flex flex-col justify-end items-end mt-[10px]">
+                      {/* Row 2: Labels col 1-2, Values col 3-6 */}
+                      <div className="col-span-1 flex flex-col gap-y-[2px] opacity-50 mt-[10px]">
+                        <p>Item</p>
+                        <p>Finish</p>
+                      </div>
+                      <div className="col-span-3 flex flex-col gap-y-[2px] mt-[10px]">
+                        <p>{line.merchandise.product.title}</p>
+                        <p>{finish}</p>
+                      </div>
+
+                      {/* Row 3: Qty/Subtotal labels, values, remove */}
+                      <div className="col-span-1 flex flex-col gap-y-[2px] opacity-50 mt-[10px]">
+                        <p>Qty</p>
+                        <p>Subtotal</p>
+                      </div>
+                      <div className="col-span-2 flex flex-col gap-y-[2px] mt-[10px]">
+                        <div className="flex items-center gap-x-[10px]">
                           <button
-                            onClick={() => removeLine(line.id)}
-                            disabled={isUpdating}
-                            className="hover:opacity-50"
+                            onClick={() =>
+                              updateQuantity(line.id, Math.max(1, line.quantity - 1))
+                            }
+                            disabled={isUpdating || line.quantity <= 1}
+                            className="opacity-50 hover:opacity-100"
                           >
-                            Remove
+                            -
+                          </button>
+                          <span>{line.quantity}</span>
+                          <button
+                            onClick={() =>
+                              updateQuantity(line.id, line.quantity + 1)
+                            }
+                            disabled={isUpdating}
+                            className="opacity-50 hover:opacity-100"
+                          >
+                            +
                           </button>
                         </div>
+                        <p>
+                          {formatPrice(
+                            String(itemPrice),
+                            line.merchandise.priceV2.currencyCode
+                          )}
+                        </p>
+                      </div>
+                      <div className="col-span-1 flex flex-col justify-end items-end mt-[10px]">
+                        <button
+                          onClick={() => removeLine(line.id)}
+                          disabled={isUpdating}
+                          className="hover:opacity-50"
+                        >
+                          REMOVE
+                        </button>
                       </div>
                     </div>
 
@@ -364,7 +365,7 @@ export const Cart = ({
                           className="cursor-pointer"
                         >
                           <Typing text="REMOVE" />
-                          
+
                         </button>
                       </div>
                     </div>
