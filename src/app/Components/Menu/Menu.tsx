@@ -44,14 +44,14 @@ const Menu = ({
             <Typing text="release 01 <br> — Stockholm, Sweden" />
           </Link>
         </p>
-        <div className="relative group lg:col-span-3">
+        <div className="relative lg:col-span-3">
           <p onClick={() => setIsFilteredShop(null)} className="uppercase pointer-events-auto relative">
             <Link href="/shop">
               <Typing text="shop" />
             </Link>
           </p>
           {!product && (
-            <div className={`absolute left-[calc(50vw-5px)] lg:left-0 pt-[50px] ${shop ? 'opacity-100' : 'opacity-0'} lg:pointer-events-auto pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto transition`}>
+            <div className={`absolute left-[calc(50vw-5px)] lg:left-0 pt-[50px] ${shop ? 'opacity-100' : 'opacity-0'} lg:pointer-events-auto pointer-events-auto transition`}>
             <p className={`${isFilteredShop === null ? 'text-black' : 'text-gray-400 hover:text-black'}`} onClick={() => setIsFilteredShop(null)}><Link href="/shop">ALL</Link></p>
             <p className={`${isFilteredShop === 'Furniture' ? 'text-black' : 'text-gray-400 hover:text-black'}`} onClick={() => setIsFilteredShop('Furniture')}><Link href="/shop">FURNITURE</Link></p>
             <p className={`${isFilteredShop === 'Objects' ? 'text-black' : 'text-gray-400 hover:text-black'}`} onClick={() => setIsFilteredShop('Objects')}><Link href="/shop">OBJECTS</Link></p>

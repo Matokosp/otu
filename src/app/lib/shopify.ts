@@ -107,8 +107,8 @@ export async function getProducts(first = 8): Promise<ShopifyProduct[]> {
     tags: p.tags,
     metafields: p.metafields,
     price:
-      p.variants?.nodes?.[0]?.priceV2?.amount && p.variants?.nodes?.[0]?.priceV2?.currencyCode
-        ? `${p.variants.nodes[0].priceV2.amount} ${p.variants.nodes[0].priceV2.currencyCode}`
+      p.variants?.nodes?.[0]?.price?.amount && p.variants?.nodes?.[0]?.price?.currencyCode
+        ? `${p.variants.nodes[0].price.amount} ${p.variants.nodes[0].price.currencyCode}`
         : undefined,
   }));
 }
@@ -332,8 +332,8 @@ export async function getProductByHandle(handle: string, revalidate = 60): Promi
       },
     },
     price:
-      p.variants?.nodes?.[0]?.priceV2?.amount && p.variants?.nodes?.[0]?.priceV2?.currencyCode
-        ? `${p.variants.nodes[0].priceV2.amount} ${p.variants.nodes[0].priceV2.currencyCode}`
+      p.variants?.nodes?.[0]?.price?.amount && p.variants?.nodes?.[0]?.price?.currencyCode
+        ? `${p.variants.nodes[0].price.amount} ${p.variants.nodes[0].price.currencyCode}`
         : undefined,
     quantityAvailable: p.variants?.nodes?.[0]?.quantityAvailable,
     availableForSale: p.variants?.nodes?.[0]?.availableForSale,
