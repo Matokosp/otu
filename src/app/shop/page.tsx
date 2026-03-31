@@ -47,8 +47,6 @@ export default async function Page() {
                 </div>
             </div>
 
-            <div className="lg:mt-[calc(-100px+50vh)] mt-[calc(50vh)]" />
-
             <div className="flex flex-col lg:gap-y-[165px] gap-y-[100px]">
                 <HighlightedProduct products={allProducts} />
 
