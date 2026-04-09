@@ -8,6 +8,7 @@ type ShopifyProduct = {
   collections: string[];
   metafields: {
     plp_images?: string[];
+    featured_description?: string;
     material_and_finish?: string;
     rarity?: string;
     description?: string;
@@ -23,6 +24,12 @@ type ShopifyProduct = {
   currentlyNotInStock?: boolean | null;
   variantId?: string | null;
 };
+
+export type collectionsType = {
+  id: string;
+  title: string;
+  description: string;
+}
 
 async function storefront(query: string, variables?: Record<string, any>, options?: { revalidate?: number }) {
   const domain = process.env.SHOPIFY_STORE_DOMAIN;
@@ -60,22 +67,6 @@ async function storefront(query: string, variables?: Record<string, any>, option
 
   const res = await fetch(url, fetchOptions);
   const json = await res.json();
-
-  // Log response when no products are returned to assist debugging (do not log tokens)
-  try {
-    if (json && json.data && json.data.products && Array.isArray(json.data.products.nodes) && json.data.products.nodes.length === 0) {
-      // Print a concise debug message to server logs — safe (no token)
-      // eslint-disable-next-line no-console
-      // console.debug("Shopify storefront: products empty response", {
-      //   url,
-      //   querySnippet: String(query).slice(0, 200),
-      //   variables: variables ? Object.keys(variables) : undefined,
-      //   data: json.data,
-      // });
-    }
-  } catch (e) {
-    // ignore logging errors
-  }
 
   if (json.errors) throw new Error(JSON.stringify(json.errors));
   return json.data;
@@ -130,6 +121,7 @@ export async function getAllProducts(): Promise<ShopifyProduct[]> {
           totalInventory
           metafields(identifiers: [
               { namespace: "custom", key: "plp_images" }
+              { namespace: "custom", key: "featured_description" }
               { namespace: "custom", key: "material_and_finish" }
               { namespace: "custom", key: "rarity" }
               { namespace: "custom", key: "description" }
@@ -203,6 +195,7 @@ export async function getAllProducts(): Promise<ShopifyProduct[]> {
         metafields: {
           plp_images: imageUrls,
           material_and_finish: p.metafields?.filter((m: any) => m?.key === "material_and_finish")[0]?.value,
+          featured_description: p.metafields?.filter((m: any) => m?.key === "featured_description")[0]?.value,
           rarity: p.metafields?.filter((m: any) => m?.key === "rarity")[0]?.value,
           description: p.metafields?.filter((m: any) => m?.key === "description")[0]?.value,
           dimensions: p.metafields?.filter((m: any) => m?.key === "dimensions")[0]?.value,
@@ -229,6 +222,23 @@ export async function getAllProducts(): Promise<ShopifyProduct[]> {
   }
 
   return all;
+}
+
+export async function getCollections(): Promise<Array<{ id: string; title: string; description: string }>> {
+  const query = `
+    query getCollections {
+      collections(first: 250) {
+        nodes {
+          id
+          title
+          description
+        }
+      }
+    }
+  `;
+
+  const data = await storefront(query, {}, { revalidate: 60 });
+  return data.collections.nodes;
 }
 
 export async function getProductByHandle(handle: string, revalidate = 60): Promise<ShopifyProduct | null> {

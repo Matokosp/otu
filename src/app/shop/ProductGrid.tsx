@@ -90,7 +90,7 @@ export const HighlightedProduct = ({ products }: { products?: ShopifyProduct[] }
                 <Link href={`/products/${product.handle}`} key={product.id}>
                     <div className="grid grid-cols-1 gap-[10px] lg:grid-cols-3 px-[10px] mb-[10px]">
                         <div className="col-span-1 lg:col-start-2 flex items-center">
-                            <p className="uppercase">{product.metafields?.description_long}</p>
+                            <p className="uppercase">{product.metafields?.featured_description}</p>
                         </div>
                     </div>
                     <div className="grid grid-cols-2 gap-[10px] md:grid-cols-3 lg:grid-cols-6 px-[10px]">

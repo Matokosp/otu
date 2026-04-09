@@ -2,7 +2,7 @@ import { Metadata } from "next";
 import Menu from "../Components/Menu/Menu";
 import Link from "next/link";
 import { CustomImage } from "../Components/Image/Image";
-import { getAllProducts, ShopifyProduct } from "../lib/shopify";
+import { getAllProducts, ShopifyProduct, getCollections, collectionsType } from "../lib/shopify";
 import { HighlightedProduct, ProductGrid } from "./ProductGrid";
 
 export const metadata: Metadata = {
@@ -29,17 +29,15 @@ export const metadata: Metadata = {
 
 export default async function Page() {
     const allProducts: ShopifyProduct[] = await getAllProducts().catch((e) => { console.log("Error fetching products:", e); return []; });
+    const collections: collectionsType[] = await getCollections().catch((e) => { console.log("Error fetching collections:", e); return []; });
+
+    const filteredCollections = collections.filter((collection) => collection.description);
 
     return (
         <main className="relative">
             <Menu page shop />
             {/* LOGO */}
-            <div
-                className="w-[calc(100vw/12*2)] px-[10px] grid fixed z-[99] translate-y-[-50%] lg:block top-[50svh]"
-                style={{
-                    // top: "lg:50svh"
-                }}
-            >
+            <div className="w-[calc(100vw/12*2)] px-[10px] grid fixed z-[99] translate-y-[-50%] lg:block top-[50svh]">
                 <div className="pl-[10%] min-w-[180px]">
                     <Link href={"/"}>
                         <CustomImage alt="" src="/images/logo.svg" className="w-full" />
@@ -54,7 +52,7 @@ export default async function Page() {
                 <div>
                     <div className="grid grid-cols-1 gap-[10px] lg:grid-cols-3 px-[10px] mb-[10px]">
                         <div className="col-span-1 lg:col-start-2 flex items-center">
-                            <p className="uppercase">NO HARD FEELINGS IS CRAFTED FROM LOCALLY SOURCED SWEDISH OAK, CHOSEN FOR ITS NATURAL CHARM AND DURABILITY. EACH PIECE REFLECTS THE LEGACY OF ITS TREE, REVEALED IN UNIQUE AND EXPRESSIVE GRAIN PATTERNS.</p>
+                            <p className="uppercase">{filteredCollections[0].description}</p>
                         </div>
                     </div>
                     <ProductGrid products={allProducts} />
