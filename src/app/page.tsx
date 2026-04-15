@@ -35,7 +35,7 @@ export default function Home() {
 
   return (
     <div className="relative">
-      <Menu />
+      <Menu page={false} product={false} />
       <main className="relative mt-[-100svh] lg:pt-[73px] pb-[33px] pt-[calc(50svh+65px)]">
         <div className="w-[calc(100vw/12*2)] px-[10px] grid fixed top-[50svh] translate-y-[-50%]">
           <div className="pl-[10%] min-w-[180px]">
