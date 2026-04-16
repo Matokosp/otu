@@ -34,7 +34,7 @@ const Footer = () => {
               </Link>
             </li>
             <li>
-              <Link href="/policies/refund-policy">
+              <Link href="/info">
                 <Typing text="Exchange & returns" />
               </Link>
             </li>
