@@ -104,6 +104,30 @@ export async function getProducts(first = 8): Promise<ShopifyProduct[]> {
   }));
 }
 
+export async function getShopPolicies(): Promise<{
+  privacyPolicy: { title: string; body: string } | null;
+  refundPolicy: { title: string; body: string } | null;
+  termsOfService: { title: string; body: string } | null;
+}> {
+  const query = `
+    query getShopPolicies {
+      shop {
+        privacyPolicy { body title }
+        refundPolicy { body title }
+        termsOfService { body title }
+      }
+    }
+  `;
+
+  const data = await storefront(query, {}, { revalidate: 3600 });
+
+  return {
+    privacyPolicy: data.shop.privacyPolicy || null,
+    refundPolicy: data.shop.refundPolicy || null,
+    termsOfService: data.shop.termsOfService || null,
+  };
+}
+
 export async function getAllProducts(): Promise<ShopifyProduct[]> {
   const pageSize = 50;
   let hasNext = true;

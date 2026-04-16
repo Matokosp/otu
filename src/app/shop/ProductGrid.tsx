@@ -83,6 +83,7 @@ export const ProductGrid = ({ products }: { products?: ShopifyProduct[] }) => {
 
 export const HighlightedProduct = ({ products }: { products?: ShopifyProduct[] }) => {
     const { isFilteredShop } = useGlobalContext();
+    const featuredProducts = products?.filter((product) => Array.isArray(product.tags) && product.tags.includes("Featured"));
     return products && products.length > 0 && isFilteredShop === null ? (
         products
             .filter((product) => Array.isArray(product.tags) && product.tags.includes("Featured"))

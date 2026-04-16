@@ -35,7 +35,7 @@ const Content = ({
                 id={item.id}
               />
               <div
-                className="col-span-4 mb-[35px] lg:mb-0 lg:col-start-6 lg:col-end-11"
+                className="col-span-4 mb-[35px] lg:mb-0 lg:col-start-6 lg:col-end-11 [&_ul_li]:mt-[10px] [&_div_p_span_strong]:block [&_strong]:mt-[10px]"
                 dangerouslySetInnerHTML={{ __html: item.text }}
               />
             </React.Fragment>

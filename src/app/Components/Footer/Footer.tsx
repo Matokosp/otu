@@ -34,7 +34,7 @@ const Footer = () => {
               </Link>
             </li>
             <li>
-              <Link href="/info">
+              <Link href="/policies/refund-policy">
                 <Typing text="Exchange & returns" />
               </Link>
             </li>
@@ -46,12 +46,12 @@ const Footer = () => {
           </ul>
           <ul>
             <li>
-              <Link href={"/terms-and-conditions#privacy"}>
+              <Link href={"/policies/privacy-policy"}>
                 <Typing text="Privacy Policy" />
               </Link>
             </li>
             <li>
-              <Link href={"/terms-and-conditions#terms"}>
+              <Link href={"/policies/terms-of-service"}>
                 <Typing text="Terms & conditions" />
               </Link>
             </li>

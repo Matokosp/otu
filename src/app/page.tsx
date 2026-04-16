@@ -3,6 +3,8 @@ import { CustomImage } from "./Components/Image/Image";
 import Menu from "./Components/Menu/Menu";
 import Link from "next/link";
 
+import { getShopPolicies } from '@/app/lib/shopify';
+
 export const metadata: Metadata = {
   title: "OF THE USELESS",
   description:
@@ -25,7 +27,7 @@ export const metadata: Metadata = {
   },
 };
 
-export default function Home() {
+export default async function Home() {
   const images = [
     "/images/home/chair_01.jpg",
     "/images/home/chair_02.jpg",

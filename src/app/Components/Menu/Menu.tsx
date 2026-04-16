@@ -79,7 +79,7 @@ const Menu = ({
         )}
       </div>
       {shop && (
-        <div className="lg:mb-[calc(-165px+50vh)] mb-[calc(50vh-60px)] lg:grid-cols-12 grid-cols-4 grid gap-x-[10px] px-[10px]">
+        <div className="lg:mb-[calc(-155px+50vh)] mb-[calc(50vh-60px)] lg:grid-cols-12 grid-cols-4 grid gap-x-[10px] px-[10px]">
           <div className="lg:col-span-3 col-span-2"></div>
           <div className={`lg:pointer-events-auto`}>
             <p className={`${isFilteredShop === null ? 'text-black' : 'text-[rgba(0,0,0,0.5)] hover:text-black'}`} onClick={() => setIsFilteredShop(null)}><Link href="/shop"><Typing text="ALL" /></Link></p>
