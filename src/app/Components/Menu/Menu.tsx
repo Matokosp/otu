@@ -58,7 +58,7 @@ const Menu = ({
             </Link>
           </p>
           <p onClick={() => setCartOpen(true)} className="uppercase col-span-3 pointer-events-auto cursor-pointer text-right lg:text-left">
-            cart {cartCount > 0 ? ` [${cartCount}]` : "[0]"}
+             <Typing text={`cart ${cartCount > 0 ? ` [${cartCount}]` : "[0]"}`} />
           </p>
         </nav>
         {!page && !product && (
@@ -82,10 +82,10 @@ const Menu = ({
         <div className="lg:mb-[calc(-165px+50vh)] mb-[calc(50vh-60px)] lg:grid-cols-12 grid-cols-4 grid gap-x-[10px] px-[10px]">
           <div className="lg:col-span-3 col-span-2"></div>
           <div className={`lg:pointer-events-auto`}>
-            <p className={`${isFilteredShop === null ? 'text-black' : 'text-[rgba(0,0,0,0.5)] hover:text-black'}`} onClick={() => setIsFilteredShop(null)}><Link href="/shop">ALL</Link></p>
-            <p className={`${isFilteredShop === 'Furniture' ? 'text-black' : 'text-[rgba(0,0,0,0.5)] hover:text-black'}`} onClick={() => setIsFilteredShop('Furniture')}><Link href="/shop">FURNITURE</Link></p>
-            <p className={`${isFilteredShop === 'Objects' ? 'text-black' : 'text-[rgba(0,0,0,0.5)] hover:text-black'}`} onClick={() => setIsFilteredShop('Objects')}><Link href="/shop">OBJECTS</Link></p>
-            <p className={`${isFilteredShop === 'Found & Antiques' ? 'text-black' : 'text-[rgba(0,0,0,0.5)] hover:text-black'}`} onClick={() => setIsFilteredShop('Found & Antiques')}><Link href="/shop">ANTIQUE</Link></p>
+            <p className={`${isFilteredShop === null ? 'text-black' : 'text-[rgba(0,0,0,0.5)] hover:text-black'}`} onClick={() => setIsFilteredShop(null)}><Link href="/shop"><Typing text="ALL" /></Link></p>
+            <p className={`${isFilteredShop === 'Furniture' ? 'text-black' : 'text-[rgba(0,0,0,0.5)] hover:text-black'}`} onClick={() => setIsFilteredShop('Furniture')}><Link href="/shop"><Typing text="FURNITURE" /></Link></p>
+            <p className={`${isFilteredShop === 'Objects' ? 'text-black' : 'text-[rgba(0,0,0,0.5)] hover:text-black'}`} onClick={() => setIsFilteredShop('Objects')}><Link href="/shop"><Typing text="OBJECTS" /></Link></p>
+            <p className={`${isFilteredShop === 'Found & Antiques' ? 'text-black' : 'text-[rgba(0,0,0,0.5)] hover:text-black'}`} onClick={() => setIsFilteredShop('Found & Antiques')}><Link href="/shop"><Typing text="ANTIQUE" /></Link></p>
           </div>
         </div>
       )}
