@@ -7,6 +7,7 @@ import { CustomImage } from "../../Components/Image/Image";
 import Button from "../../Components/Button/Button";
 import { useGlobalContext } from "@/app/context/store";
 import { Typing } from "../../Components/Typing/Typing";
+import { formatPrice } from "@/app/lib/formatPrice";
 
 const CART_ID_KEY = "shopify_cart_id";
 
@@ -265,7 +266,7 @@ export const Product = ({ productData }: { productData?: ProductData }) => {
                     {productData?.metafields?.material_and_finish ? productData.metafields.material_and_finish : ""}
                   </p>
                   <div>
-                    <p>{productData?.price ?? ""}</p>
+                    <p>{productData?.price ? formatPrice(productData.price) : ""}</p>
                     <p className={`opacity-50`}>Including VAT</p>
                     <p
                       className="!select-all opacity-50 pointer-events-auto"
@@ -345,7 +346,7 @@ export const Product = ({ productData }: { productData?: ProductData }) => {
             <div className="w-[100%] mt-[40px] uppercase">
               <div className="flex flex-col gap-y-[40px] break-words ml-[calc(50vw-10px)] lg:ml-0">
                 <div>
-                  <p>{productData?.price ?? ""}</p>
+                  <p>{productData?.price ? formatPrice(productData.price) : ""}</p>
                   <p className={`opacity-50`}>Including VAT</p>
                 </div>
                 <p className="">

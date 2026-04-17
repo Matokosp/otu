@@ -4,6 +4,7 @@ import { useGlobalContext } from "@/app/context/store";
 import { ShopifyProduct } from "../lib/shopify";
 import { CustomImage } from "../Components/Image/Image";
 import Link from "next/link";
+import { formatPrice } from "../lib/formatPrice";
 
 export const ProductGrid = ({ products }: { products?: ShopifyProduct[] }) => {
 
@@ -71,7 +72,7 @@ export const ProductGrid = ({ products }: { products?: ShopifyProduct[] }) => {
                             <p className="mt-2 z-2 text-black uppercase">{p.title}</p>
                         )}
                         {isSecondImageOfProduct && (
-                            <p className="mt-2 z-2 text-black text-right lg:text-left flex justify-between"><span className="uppercase text-[rgba(0,0,0,0.5)]">{!p.availableForSale ? 'out of stock' : ''}</span>{p.price}</p>
+                            <p className="mt-2 z-2 text-black text-right lg:text-left flex justify-between"><span className="uppercase text-[rgba(0,0,0,0.5)]">{!p.availableForSale ? 'out of stock' : ''}</span>{p.price && formatPrice(p.price)}</p>
                         )}
                     </div>
                 );
@@ -106,7 +107,7 @@ export const HighlightedProduct = ({ products }: { products?: ShopifyProduct[] }
                                     <p className="hidden lg:block absolute mt-[10px] left-0">{product.title}</p>
                                 )}
                                 {i === 1 && (
-                                    <p className="hidden lg:block absolute mt-[10px] left-0">{product.price}</p>
+                                    <p className="hidden lg:block absolute mt-[10px] left-0">{product.price && formatPrice(product.price)}</p>
                                 )}
                                 {i === 2 && (
                                     <p className="hidden lg:block absolute mt-[10px] left-0">HANDCRAFTED IN SWEDEN</p>
@@ -116,7 +117,7 @@ export const HighlightedProduct = ({ products }: { products?: ShopifyProduct[] }
                     </div>
                     <div className="flex justify-between px-[10px] mt-[10px] lg:hidden">
                         <p className="uppercase">{product.title}</p>
-                        <p>{product.price}</p>
+                        <p>{product.price && formatPrice(product.price)}</p>
                     </div>
                 </Link>
             ))
