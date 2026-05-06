@@ -263,7 +263,8 @@ export const Product = ({ productData }: { productData?: ProductData }) => {
                 <div className="flex flex-col gap-y-[40px] break-words">
                   <p className="hidden lg:block">
                     {productData?.title ?? "No Hard feelings chair"} <br />
-                    {productData?.metafields?.material_and_finish ? productData.metafields.material_and_finish : ""}
+                    {productData?.metafields?.material_and_finish ? productData.metafields.material_and_finish : ""} <br />
+                    {productData?.metafields?.rarity ? <span className="text-[rgba(0,0,0,0.5)]">{productData.metafields.rarity}</span> : ""}
                   </p>
                   <div>
                     <p>{productData?.price ? formatPrice(productData.price) : ""}</p>

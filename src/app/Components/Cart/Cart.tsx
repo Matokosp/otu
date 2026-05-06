@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { CustomImage } from "../Image/Image";
 import { Typing } from "../Typing/Typing";
+import { formatPrice } from "@/app/lib/formatPrice";
 
 const CART_ID_KEY = "shopify_cart_id";
 
@@ -44,11 +45,11 @@ type CartData = {
   };
 };
 
-const formatPrice = (amount: string, currencyCode: string) => {
-  const num = parseFloat(amount);
-  const symbol = currencyCode === "EUR" ? "€" : currencyCode === "USD" ? "$" : currencyCode === "GBP" ? "£" : currencyCode === "SEK" ? "kr " : "";
-  return `${symbol} ${Math.round(num)}`;
-};
+// const formatPrice = (amount: string, currencyCode: string) => {
+//   const num = parseFloat(amount);
+//   const symbol = currencyCode === "EUR" ? "€" : currencyCode === "USD" ? "$" : currencyCode === "GBP" ? "£" : currencyCode === "SEK" ? "kr " : "";
+//   return `${symbol} ${Math.round(num)}`;
+// };
 
 export const Cart = ({
   isOpen,
@@ -195,7 +196,7 @@ export const Cart = ({
         {/* Header */}
         <div className="grid grid-cols-6 gap-[10px] px-[10px] py-[10px] uppercase text-sm">
           <div className="col-span-3"></div>
-          <p className="col-span-2">Cart [{totalQuantity}]</p>
+          <p className="col-span-2">Cart [ {totalQuantity} ]</p>
           <button onClick={onClose} className="col-span-1 text-right uppercase text-sm">
             <Typing text="close" />
           </button>
@@ -275,10 +276,7 @@ export const Cart = ({
                           </button>
                         </div>
                         <p>
-                          {formatPrice(
-                            String(itemPrice),
-                            line.merchandise.priceV2.currencyCode
-                          )}
+                          {formatPrice(`${itemPrice} ${line.merchandise.priceV2.currencyCode}`)}
                         </p>
                       </div>
                       <div className="col-span-1 flex flex-col justify-end items-end mt-[10px]">
@@ -347,10 +345,7 @@ export const Cart = ({
                           </button>
                         </div>
                         <p>
-                          {formatPrice(
-                            String(itemPrice),
-                            line.merchandise.priceV2.currencyCode
-                          )}
+                         {formatPrice(`${itemPrice} ${line.merchandise.priceV2.currencyCode}`)}
                         </p>
                       </div>
 
@@ -394,8 +389,7 @@ export const Cart = ({
                 <p>Calculated in the next step</p>
                 <p>
                   {formatPrice(
-                    cart?.cost?.totalAmount?.amount ?? "0",
-                    cart?.cost?.totalAmount?.currencyCode ?? "EUR"
+                    `${cart?.cost?.totalAmount?.amount ?? "0"} ${cart?.cost?.totalAmount?.currencyCode ?? "EUR"}`
                   )}
                 </p>
               </div>

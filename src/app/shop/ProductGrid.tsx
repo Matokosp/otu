@@ -44,7 +44,7 @@ export const ProductGrid = ({ products }: { products?: ShopifyProduct[] }) => {
 
     return (
         <div className="grid grid-cols-2 lg:grid-cols-6 gap-x-[10px] gap-y-[25px] px-[10px]">
-            {cells.map((c) => {
+            {cells.map((c,i) => {
                 const p = fallback[c.productIndex];
                 const isFirstImageOfProduct = c.imageIndex === 0;
                 const isSecondImageOfProduct = c.imageIndex === 1;
@@ -55,7 +55,7 @@ export const ProductGrid = ({ products }: { products?: ShopifyProduct[] }) => {
                         key={`${c.productIndex}-${c.imageIndex}`}
                         className={`relative ${c.isExtra ? "hidden lg:block" : ""}`}
                     >
-                        <div className="aspect-[228/343] relative overflow-hidden">
+                        <div className={`aspect-[228/343] relative overflow-hidden`}>
                             {p.handle ? (
                                 <Link href={`/products/${p.handle}`}>
                                     <div className="w-full h-full">
@@ -88,7 +88,7 @@ export const HighlightedProduct = ({ products }: { products?: ShopifyProduct[] }
     return products && products.length > 0 && isFilteredShop === null ? (
         products
             .filter((product) => Array.isArray(product.tags) && product.tags.includes("Featured"))
-            .map((product: ShopifyProduct) => (
+            .map((product: ShopifyProduct, i) => (
                 <Link href={`/products/${product.handle}`} key={product.id}>
                     <div className="grid grid-cols-1 gap-[10px] lg:grid-cols-3 px-[10px] mb-[10px]">
                         <div className="col-span-1 lg:col-start-2 flex items-center">
@@ -97,7 +97,7 @@ export const HighlightedProduct = ({ products }: { products?: ShopifyProduct[] }
                     </div>
                     <div className="grid grid-cols-2 gap-[10px] md:grid-cols-3 lg:grid-cols-6 px-[10px]">
                         {product.metafields?.plp_images?.map((img, i) => (
-                            <div key={i} className="aspect-[228/343] relative">
+                            <div key={i} className={`aspect-[228/343] relative ${i > 3 && 'hidden lg:block'}`}>
                                 <CustomImage
                                     alt=""
                                     src={img}
