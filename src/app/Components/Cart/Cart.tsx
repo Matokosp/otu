@@ -345,7 +345,7 @@ export const Cart = ({
                           </button>
                         </div>
                         <p>
-                         {formatPrice(`${itemPrice} ${line.merchandise.priceV2.currencyCode}`)}
+                          {formatPrice(`${itemPrice} ${line.merchandise.priceV2.currencyCode}`)}
                         </p>
                       </div>
 
@@ -374,18 +374,15 @@ export const Cart = ({
         {/* Footer */}
         {lines.length > 0 && (
           <div>
-            <div className="grid grid-cols-6 gap-[10px] px-[10px] uppercase text-sm py-[20px]">
-              {/* Empty cols 1-2 on desktop */}
-              <div className="hidden lg:block lg:col-span-2" />
+            <div className="flex items-end lg:grid lg:grid-cols-6 gap-[10px] px-[10px] uppercase text-sm py-[20px]">
+              <div className="hidden lg:block lg:col-span-1 xl:col-span-2" />
 
-              {/* Labels */}
-              <div className="col-span-2 lg:col-span-1 flex flex-col gap-y-[2px] opacity-50">
-                <p>Shipping</p>
+              <div className="ml-[25%] lg:ml-0 shrink-0 whitespace-nowrap lg:col-span-2 lg:ml-0 xl:col-span-1 flex flex-col gap-y-[2px]">
+                <p className="opacity-50">Shipping</p>
                 <p>Total (incl. VAT)</p>
               </div>
 
-              {/* Values */}
-              <div className="col-span-4 lg:col-span-3 flex flex-col gap-y-[2px]">
+              <div className="flex-1 min-w-0 lg:flex-none lg:col-span-3 flex flex-col gap-y-[2px]">
                 <p>Calculated in the next step</p>
                 <p>
                   {formatPrice(
