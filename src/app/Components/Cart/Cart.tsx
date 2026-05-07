@@ -194,9 +194,9 @@ export const Cart = ({
           } w-full lg:w-[50vw]`}
       >
         {/* Header */}
-        <div className="grid grid-cols-6 gap-[10px] px-[10px] py-[10px] uppercase text-sm">
-          <div className="col-span-3"></div>
-          <p className="col-span-2">Cart [ {totalQuantity} ]</p>
+        <div className="grid grid-cols-3 lg:grid-cols-6 gap-[10px] px-[10px] py-[10px] uppercase text-sm">
+          <div className="col-span-1 lg:col-span-3"/>
+          <p className="col-span-1 text-center lg:text-left lg:col-span-2">Cart [ {totalQuantity} ]</p>
           <button onClick={onClose} className="col-span-1 text-right uppercase text-sm">
             <Typing text="close" />
           </button>
