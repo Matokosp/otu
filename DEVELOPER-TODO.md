@@ -54,14 +54,7 @@ Remove the full-screen `CookieBanner` overlay entirely — no consent UI at all.
 - ⚠️ Standing rule: if analytics or any marketing pixel is EVER added, a consent UI must come back first.
 - While in there: `ShopifyConsent.tsx` hardcodes `countryCode: 'SE'` for all visitors — review once market/country context exists (item 1).
 
-### 7. GPSR manufacturer info on product pages (EU legal requirement)
-The EU General Product Safety Regulation (in force Dec 2024) requires every online listing of a **new** product (chair, stool, new ceramics — genuine antiques exempt) to show the manufacturer's name, postal address and email.
-
-- Add a "Manufacturer" entry to the product-info accordion in `Product.tsx` (alongside Dimensions / Material / Care / Shipping):
-  "Of The Useless, Hantverkargatan 12A, 112 21 Stockholm, Sweden — enquires@oftheuseless.com"
-- Static text is fine (OTU is the manufacturer of all new products). If antiques should not show it, gate on collection/tag.
-
-### 8. Small fixes
+### 7. Small fixes
 - `formatPrice` rounds decimals (150.50 → "151") — displayed price must equal charged price; show öre/cents when present.
 - Footer © year: 2025 → dynamic.
 - `/info` menu anchor `#Trade` vs section id `trade` (case mismatch, dead anchor).
