@@ -38,6 +38,13 @@ const Footer = () => {
                 <Typing text="Exchange & returns" />
               </Link>
             </li>
+            <li>
+              {/* Withdrawal function ("ångerknapp") required by distansavtalslagen since 19 June 2026.
+                  Official customer accounts URL from Shopify admin → Settings → Customer accounts. */}
+              <a href="https://shopify.com/95940903255/account">
+                <Typing text="Cancel your order" />
+              </a>
+            </li>
           </ul>
           <ul className="lg:hidden">
             <li>

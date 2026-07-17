@@ -15,7 +15,7 @@ export default function Page() {
     },
     {
       title: "Payments",
-      text: "All payments are processed securely through Stripe, which supports major credit cards and certain digital wallets. Prices are stated in Euro, with VAT included for EU residents. For Non-EU residents pricing is displayed without VAT.  Prices do not include any applicable taxes, shipping, or handling charges; these will be calculated and added at checkout.",
+      text: "All payments are processed securely through Shopify's checkout, which supports major credit cards and digital wallets. Prices include VAT for EU residents. For Non-EU residents pricing is displayed without VAT. Shipping costs are calculated and added at checkout.",
       id: "payments",
     },
     {
@@ -30,7 +30,7 @@ export default function Page() {
     },
     {
       title: "Exchange and Returns",
-      text: `<p>Made-to-order items cannot be returned or exchanged unless they arrive defective or deviate from what was agreed. Standard (non-custom) items for EU residents can be returned within 14 days of delivery if unused and in their original packaging; shipping fees apply. If you receive a defective or incorrect product, please contact us immediately, and we will arrange a replacement, repair, or refund as appropriate.</p>
+      text: `<p>Made-to-order items cannot be returned or exchanged unless they arrive defective or deviate from what was agreed. Standard (non-custom) items for EU residents can be returned within 14 days of delivery, without giving any reason. You may examine the item as you would in a store; if its value is diminished because it was handled more than necessary, we may deduct the corresponding loss in value from the refund. Return shipping is paid by the customer. To cancel an order or start a return, use "Cancel your order" in the footer or email enquires@oftheuseless.com. If you receive a defective or incorrect product, please contact us immediately, and we will arrange a replacement, repair, or refund as appropriate.</p>
       <br />
       <br />
       <p>For complete details, please refer to our Terms & Conditions page.</p>
