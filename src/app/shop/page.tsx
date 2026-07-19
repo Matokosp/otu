@@ -4,6 +4,7 @@ import Link from "next/link";
 import { CustomImage } from "../Components/Image/Image";
 import { getAllProducts, ShopifyProduct, getCollections, collectionsType } from "../lib/shopify";
 import { HighlightedProduct, ProductGrid } from "./ProductGrid";
+import { getServerRegion, getRegionCountry } from "../lib/market";
 
 export const metadata: Metadata = {
     title: "Shop - OF THE USELESS",
@@ -28,8 +29,10 @@ export const metadata: Metadata = {
 };
 
 export default async function Page() {
-    const allProducts: ShopifyProduct[] = await getAllProducts().catch((e) => { console.log("Error fetching products:", e); return []; });
-    const collections: collectionsType[] = await getCollections().catch((e) => { console.log("Error fetching collections:", e); return []; });
+    const region = await getServerRegion();
+    const country = getRegionCountry(region);
+    const allProducts: ShopifyProduct[] = await getAllProducts(country).catch((e) => { console.log("Error fetching products:", e); return []; });
+    const collections: collectionsType[] = await getCollections(country).catch((e) => { console.log("Error fetching collections:", e); return []; });
 
     const filteredCollections = collections.filter((collection) => collection.description);
 
@@ -52,7 +55,7 @@ export default async function Page() {
                 <div>
                     <div className="grid grid-cols-1 gap-[10px] lg:grid-cols-3 px-[10px] mb-[10px]">
                         <div className="col-span-1 lg:col-start-2 flex items-center">
-                            <p className="uppercase">{filteredCollections[0].description}</p>
+                            <p className="uppercase">{filteredCollections[0]?.description}</p>
                         </div>
                     </div>
                     <ProductGrid products={allProducts} />

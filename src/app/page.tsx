@@ -3,8 +3,6 @@ import { CustomImage } from "./Components/Image/Image";
 import Menu from "./Components/Menu/Menu";
 import Link from "next/link";
 
-import { getShopPolicies } from '@/app/lib/shopify';
-
 export const metadata: Metadata = {
   title: "OF THE USELESS",
   description:

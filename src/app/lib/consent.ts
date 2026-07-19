@@ -28,5 +28,6 @@ export function getConsent(): ConsentState | null {
 
 export function setConsent(consent: ConsentState) {
   const value = encodeURIComponent(JSON.stringify(consent));
-  document.cookie = `${COOKIE_NAME}=${value}; path=/; max-age=${COOKIE_MAX_AGE}; SameSite=Lax`;
+  const secure = typeof location !== 'undefined' && location.protocol === 'https:' ? '; Secure' : '';
+  document.cookie = `${COOKIE_NAME}=${value}; path=/; max-age=${COOKIE_MAX_AGE}; SameSite=Lax${secure}`;
 }

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { CustomImage } from "../Image/Image";
 import { Typing } from "../Typing/Typing";
 import { formatPrice } from "@/app/lib/formatPrice";
@@ -23,7 +23,7 @@ type CartLine = {
       url: string;
       altText: string;
     } | null;
-    priceV2: {
+    price: {
       amount: string;
       currencyCode: string;
     };
@@ -61,6 +61,7 @@ export const Cart = ({
   const [cart, setCart] = useState<CartData | null>(null);
   const [loading, setLoading] = useState(false);
   const [updatingLines, setUpdatingLines] = useState<Set<string>>(new Set());
+  const drawerRef = useRef<HTMLDivElement>(null);
 
   const fetchCart = useCallback(async () => {
     const cartId = localStorage.getItem(CART_ID_KEY);
@@ -97,15 +98,38 @@ export const Cart = ({
   }, [isOpen, fetchCart]);
 
   useEffect(() => {
-    const handleEsc = (e: KeyboardEvent) => {
-      if (e.key === "Escape") onClose();
+    const handleKeydown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        onClose();
+        return;
+      }
+
+      if (e.key !== "Tab" || !drawerRef.current) return;
+
+      const focusable = drawerRef.current.querySelectorAll<HTMLElement>(
+        'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+      );
+      if (focusable.length === 0) return;
+
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
+      }
     };
+
     if (isOpen) {
-      document.addEventListener("keydown", handleEsc);
+      document.addEventListener("keydown", handleKeydown);
       document.body.style.overflow = "hidden";
+      drawerRef.current?.focus();
     }
     return () => {
-      document.removeEventListener("keydown", handleEsc);
+      document.removeEventListener("keydown", handleKeydown);
       document.body.style.overflow = "";
     };
   }, [isOpen, onClose]);
@@ -190,6 +214,11 @@ export const Cart = ({
 
       {/* Drawer */}
       <div
+        ref={drawerRef}
+        role="dialog"
+        aria-modal="true"
+        aria-label="Cart"
+        tabIndex={-1}
         className={`[&_*]:text-[12px] fixed top-0 right-0 h-full z-[999] pointer-events-auto bg-white flex flex-col transition-transform duration-300 ease-in-out ${isOpen ? "translate-x-0" : "translate-x-full"
           } w-full lg:w-[50vw]`}
       >
@@ -197,7 +226,7 @@ export const Cart = ({
         <div className="grid grid-cols-3 lg:grid-cols-6 gap-[10px] px-[10px] py-[10px] uppercase text-sm">
           <div className="col-span-1 lg:col-span-3"/>
           <p className="col-span-1 text-center lg:text-left lg:col-span-2">Cart [ {totalQuantity} ]</p>
-          <button onClick={onClose} className="col-span-1 text-right uppercase text-sm">
+          <button onClick={onClose} aria-label="Close cart" className="col-span-1 text-right uppercase text-sm">
             <Typing text="close" />
           </button>
         </div>
@@ -212,7 +241,7 @@ export const Cart = ({
             <div className="flex flex-col gap-y-[40px] lg:gap-y-[10px]">
               {lines.map((line, index) => {
                 const isUpdating = updatingLines.has(line.id);
-                const itemPrice = parseFloat(line.merchandise.priceV2.amount) * line.quantity;
+                const itemPrice = parseFloat(line.merchandise.price.amount) * line.quantity;
                 const finish = line.merchandise.product.metafield?.value ?? "-";
 
                 return (
@@ -230,7 +259,7 @@ export const Cart = ({
                         {line.merchandise.image?.url && (
                           <CustomImage
                             src={line.merchandise.image.url}
-                            alt={line.merchandise.image.altText ?? ""}
+                            alt={line.merchandise.image.altText || line.merchandise.product.title}
                             ratio="2/3"
                             className="w-full"
                           />
@@ -260,6 +289,7 @@ export const Cart = ({
                               updateQuantity(line.id, Math.max(1, line.quantity - 1))
                             }
                             disabled={isUpdating || line.quantity <= 1}
+                            aria-label={`Decrease quantity of ${line.merchandise.product.title}`}
                             className="opacity-50 hover:opacity-100"
                           >
                             -
@@ -270,19 +300,21 @@ export const Cart = ({
                               updateQuantity(line.id, line.quantity + 1)
                             }
                             disabled={isUpdating}
+                            aria-label={`Increase quantity of ${line.merchandise.product.title}`}
                             className="opacity-50 hover:opacity-100"
                           >
                             +
                           </button>
                         </div>
                         <p>
-                          {formatPrice(`${itemPrice} ${line.merchandise.priceV2.currencyCode}`)}
+                          {formatPrice(`${itemPrice} ${line.merchandise.price.currencyCode}`)}
                         </p>
                       </div>
                       <div className="col-span-1 flex flex-col justify-end items-end mt-[10px]">
                         <button
                           onClick={() => removeLine(line.id)}
                           disabled={isUpdating}
+                          aria-label={`Remove ${line.merchandise.product.title} from cart`}
                           className="hover:opacity-50"
                         >
                           REMOVE
@@ -302,7 +334,7 @@ export const Cart = ({
                         {line.merchandise.image?.url ? (
                           <CustomImage
                             src={line.merchandise.image.url}
-                            alt={line.merchandise.image.altText ?? ""}
+                            alt={line.merchandise.image.altText || line.merchandise.product.title}
                             ratio="2/3"
                             className="w-full"
                           />
@@ -329,6 +361,7 @@ export const Cart = ({
                               updateQuantity(line.id, Math.max(1, line.quantity - 1))
                             }
                             disabled={isUpdating || line.quantity <= 1}
+                            aria-label={`Decrease quantity of ${line.merchandise.product.title}`}
                             className="opacity-50 hover:opacity-100"
                           >
                             -
@@ -339,13 +372,14 @@ export const Cart = ({
                               updateQuantity(line.id, line.quantity + 1)
                             }
                             disabled={isUpdating}
+                            aria-label={`Increase quantity of ${line.merchandise.product.title}`}
                             className="opacity-50 hover:opacity-100"
                           >
                             +
                           </button>
                         </div>
                         <p>
-                          {formatPrice(`${itemPrice} ${line.merchandise.priceV2.currencyCode}`)}
+                          {formatPrice(`${itemPrice} ${line.merchandise.price.currencyCode}`)}
                         </p>
                       </div>
 
@@ -357,6 +391,7 @@ export const Cart = ({
                         <button
                           onClick={() => removeLine(line.id)}
                           disabled={isUpdating}
+                          aria-label={`Remove ${line.merchandise.product.title} from cart`}
                           className="cursor-pointer"
                         >
                           <Typing text="REMOVE" />

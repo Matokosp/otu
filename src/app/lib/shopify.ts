@@ -1,3 +1,5 @@
+import { applyDevTlsBypass } from "./devTls";
+
 type ShopifyProduct = {
   id: string;
   title: string;
@@ -39,15 +41,7 @@ async function storefront(query: string, variables?: Record<string, any>, option
     throw new Error("Missing SHOPIFY_STORE_DOMAIN or SHOPIFY_STOREFRONT_ACCESS_TOKEN env vars");
   }
 
-  // Dev helper: optionally skip TLS verification when running behind a proxy
-  if (process.env.SKIP_TLS_VERIFY === "true") {
-    // eslint-disable-next-line no-console
-    // console.warn("SKIP_TLS_VERIFY=true — disabling TLS certificate verification for outgoing requests (dev only)");
-    // disable Node TLS verification (dev only)
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
-  }
+  applyDevTlsBypass();
 
   const fetchOptions: any = {
     method: "POST",
@@ -62,55 +56,24 @@ async function storefront(query: string, variables?: Record<string, any>, option
     fetchOptions.next = { revalidate: options.revalidate };
   }
 
-  const apiVersion = process.env.SHOPIFY_API_VERSION || "2023-10";
+  const apiVersion = process.env.SHOPIFY_API_VERSION || "2025-01";
   const url = `https://${domain}/api/${apiVersion}/graphql.json`;
 
   const res = await fetch(url, fetchOptions);
-  const json = await res.json();
+  if (!res.ok) throw new Error(`Shopify Storefront API request failed: ${res.status}`);
 
+  const json = await res.json();
   if (json.errors) throw new Error(JSON.stringify(json.errors));
   return json.data;
 }
 
-export async function getProducts(first = 8): Promise<ShopifyProduct[]> {
-  const query = `
-    query getProducts($first: Int!) {
-      products(first: $first) {
-        nodes {
-          id
-          title
-          handle
-          tags
-          metafields
-          images(first: 4) { nodes { url } }
-          variants(first: 1) { nodes { price { amount currencyCode } } }
-        }
-      }
-    }
-  `;
-
-  const data = await storefront(query, { first }, { revalidate: 60 });
-  return data.products.nodes.map((p: any) => ({
-    id: p.id,
-    title: p.title,
-    handle: p.handle,
-    images: (p.images?.nodes || []).map((n: any) => n.url),
-    tags: p.tags,
-    metafields: p.metafields,
-    price:
-      p.variants?.nodes?.[0]?.price?.amount && p.variants?.nodes?.[0]?.price?.currencyCode
-        ? `${p.variants.nodes[0].price.amount} ${p.variants.nodes[0].price.currencyCode}`
-        : undefined,
-  }));
-}
-
-export async function getShopPolicies(): Promise<{
+export async function getShopPolicies(country = "SE"): Promise<{
   privacyPolicy: { title: string; body: string } | null;
   refundPolicy: { title: string; body: string } | null;
   termsOfService: { title: string; body: string } | null;
 }> {
   const query = `
-    query getShopPolicies {
+    query getShopPolicies($country: CountryCode!) @inContext(country: $country) {
       shop {
         privacyPolicy { body title }
         refundPolicy { body title }
@@ -119,7 +82,7 @@ export async function getShopPolicies(): Promise<{
     }
   `;
 
-  const data = await storefront(query, {}, { revalidate: 3600 });
+  const data = await storefront(query, { country }, { revalidate: 3600 });
 
   return {
     privacyPolicy: data.shop.privacyPolicy || null,
@@ -128,14 +91,14 @@ export async function getShopPolicies(): Promise<{
   };
 }
 
-export async function getAllProducts(): Promise<ShopifyProduct[]> {
+export async function getAllProducts(country = "SE"): Promise<ShopifyProduct[]> {
   const pageSize = 50;
   let hasNext = true;
   let after: string | null = null;
   const all: ShopifyProduct[] = [];
 
   const query = `
-    query getProducts($first: Int!, $after: String) {
+    query getProducts($first: Int!, $after: String, $country: CountryCode!) @inContext(country: $country) {
       products(first: $first, after: $after) {
         nodes {
           id
@@ -174,7 +137,7 @@ export async function getAllProducts(): Promise<ShopifyProduct[]> {
                 }
               }
           }
-          collections(first: $first, after: $after) { nodes { title id } }
+          collections(first: 250) { nodes { title id } }
           images(first: 4) { nodes { url } }
           variants(first: 1) {
             nodes {
@@ -195,7 +158,7 @@ export async function getAllProducts(): Promise<ShopifyProduct[]> {
   `;
 
   while (hasNext) {
-    const variables: any = { first: pageSize };
+    const variables: any = { first: pageSize, country };
     if (after) variables.after = after;
 
     const data = await storefront(query, variables, { revalidate: 60 });
@@ -248,9 +211,9 @@ export async function getAllProducts(): Promise<ShopifyProduct[]> {
   return all;
 }
 
-export async function getCollections(): Promise<Array<{ id: string; title: string; description: string }>> {
+export async function getCollections(country = "SE"): Promise<Array<{ id: string; title: string; description: string }>> {
   const query = `
-    query getCollections {
+    query getCollections($country: CountryCode!) @inContext(country: $country) {
       collections(first: 250) {
         nodes {
           id
@@ -261,13 +224,13 @@ export async function getCollections(): Promise<Array<{ id: string; title: strin
     }
   `;
 
-  const data = await storefront(query, {}, { revalidate: 60 });
+  const data = await storefront(query, { country }, { revalidate: 60 });
   return data.collections.nodes;
 }
 
-export async function getProductByHandle(handle: string, revalidate = 60): Promise<ShopifyProduct | null> {
+export async function getProductByHandle(handle: string, revalidate = 60, country = "SE"): Promise<ShopifyProduct | null> {
   const query = `
-    query getProductByHandle($handle: String!) {
+    query getProductByHandle($handle: String!, $country: CountryCode!) @inContext(country: $country) {
       productByHandle(handle: $handle) {
         id
         title
@@ -329,18 +292,16 @@ export async function getProductByHandle(handle: string, revalidate = 60): Promi
     }
   `;
 
-  const data = await storefront(query, { handle }, { revalidate });
+  const data = await storefront(query, { handle, country }, { revalidate });
   const p = data.productByHandle;
 
+  if (!p) return null;
 
   const plpMetafield = p.metafields?.find((m: any) => m?.key === "plp_images");
 
   const imageUrls = plpMetafield?.references?.nodes
     ?.map((node: { image: { url: any; }; }) => node.image?.url)
     .filter(Boolean) || [];
-
-
-  if (!p) return null;
 
   return {
     id: p.id,
@@ -374,6 +335,84 @@ export async function getProductByHandle(handle: string, revalidate = 60): Promi
     currentlyNotInStock: p.variants?.nodes?.[0]?.currentlyNotInStock,
 
   };
+}
+
+export type BlogArticle = {
+  id: string;
+  title: string;
+  handle: string;
+  excerpt: string | null;
+  contentHtml: string;
+  publishedAt: string;
+  image: { url: string; altText: string | null } | null;
+  blogHandle: string;
+  blogTitle: string;
+  metafields: {
+    with?: string;
+    craft?: string;
+    location?: string;
+  };
+};
+
+export async function getBlogArticles(): Promise<BlogArticle[]> {
+  const query = `
+    query getBlogArticles {
+      blogs(first: 10) {
+        nodes {
+          handle
+          title
+          articles(first: 250, sortKey: PUBLISHED_AT, reverse: true) {
+            nodes {
+              id
+              title
+              handle
+              excerpt
+              contentHtml
+              publishedAt
+              image { url altText }
+              metafields(identifiers: [
+                { namespace: "custom", key: "with" }
+                { namespace: "custom", key: "craft" }
+                { namespace: "custom", key: "location" }
+              ]) {
+               namespace
+              key
+              type
+              value
+              }
+            }
+          }
+        }
+      }
+    }
+  `;
+
+  const data = await storefront(query, {}, { revalidate: 60 });
+  const blogs = data?.blogs?.nodes || [];
+
+  return blogs.flatMap((blog: any) =>
+    (blog.articles?.nodes || []).map((a: any) => ({
+      id: a.id,
+      title: a.title,
+      handle: a.handle,
+      excerpt: a.excerpt || null,
+      contentHtml: a.contentHtml,
+      publishedAt: a.publishedAt,
+      image: a.image ? { url: a.image.url, altText: a.image.altText } : null,
+      blogHandle: blog.handle,
+      blogTitle: blog.title,
+      metafields: {
+        with: a.metafields?.find((m: any) => m?.key === 'with')?.value,
+        craft: a.metafields?.find((m: any) => m?.key === 'craft')?.value,
+        location: a.metafields?.find((m: any) => m?.key === 'location')?.value,
+      },
+    }))
+  );
+}
+
+export async function getBlogArticleByHandle(handle: string): Promise<BlogArticle | null> {
+  const articles = await getBlogArticles();
+  return articles.find((a) => a.handle === handle) || null;
 }
 
 export type { ShopifyProduct };

@@ -1,13 +1,22 @@
 import Link from "next/link";
 import { Typing } from "../Typing/Typing";
+import RegionSelector from "./RegionSelector";
+import { getServerRegion } from "@/app/lib/market";
 
-const Footer = () => {
+const Footer = async () => {
+  const region = await getServerRegion();
+
   return (
     <footer className="mt-[350px] uppercase p-[10px]">
       <div className="grid grid-cols-4 lg:grid-cols-12 gap-x-[10px]">
         <div className="lg:col-span-3 col-span-2"></div>
         <div className="lg:col-span-3 col-span-2 flex flex-col gap-y-[30px] lg:gap-y-[50px]">
           <ul>
+            <li>
+              <Link href="/about">
+                <Typing text="About" />
+              </Link>
+            </li>
             <li>
               <Link href="/info">
                 <Typing text="Contact" />
@@ -18,24 +27,24 @@ const Footer = () => {
                 <Typing text="Lead times & Shipping" />
               </Link>
             </li>
-            <li>
+            {/* <li>
               <Link href="/info">
                 <Typing text="Payments" />
               </Link>
-            </li>
-            <li>
+            </li> */}
+            {/* <li>
               <Link href="/info">
                 <Typing text="Custom pieces" />
+                </Link>
+                </li> */}
+            <li>
+              <Link href="/info">
+                <Typing text="Exchange & returns" />
               </Link>
             </li>
             <li>
               <Link href="/info">
                 <Typing text="Trade" />
-              </Link>
-            </li>
-            <li>
-              <Link href="/info">
-                <Typing text="Exchange & returns" />
               </Link>
             </li>
             <li>
@@ -63,6 +72,7 @@ const Footer = () => {
               </Link>
             </li>
           </ul>
+          <RegionSelector initialRegion={region} />
         </div>
         <div className="lg:hidden col-span-2" />
         <div className="lg:col-span-3 col-span-2 mt-[30px] lg:mt-0">
@@ -79,7 +89,7 @@ const Footer = () => {
         </div>
       </div>
       <div className="lg:text-right lg:mt-[200px] mt-[150px]">
-        <p>all content © of the useless 2025</p>
+        <p>all content © of the useless {new Date().getFullYear()}</p>
       </div>
     </footer>
   );

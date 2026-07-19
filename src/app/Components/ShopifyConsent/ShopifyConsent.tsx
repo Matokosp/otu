@@ -5,6 +5,7 @@ import Script from 'next/script';
 type Props = {
   shopDomain: string;
   storefrontAccessToken: string;
+  countryCode: string;
 };
 
 declare global {
@@ -13,7 +14,11 @@ declare global {
   }
 }
 
-export default function ShopifyConsent({ shopDomain, storefrontAccessToken }: Props) {
+// The site sets no non-essential cookies (no analytics, no marketing
+// pixels), so there is no consent UI — see Components/Footer removal notes.
+// Shopify checkout still needs an explicit consent signal, so we declare a
+// conservative default (everything declined) once the API is ready.
+export default function ShopifyConsent({ shopDomain, storefrontAccessToken, countryCode }: Props) {
   return (
     <Script
       id="shopify-consent"
@@ -23,10 +28,18 @@ export default function ShopifyConsent({ shopDomain, storefrontAccessToken }: Pr
         window.Shopify = window.Shopify || {};
         window.Shopify.currentShop = {
           shop: shopDomain,
-          countryCode: 'SE',
+          countryCode,
           storefrontAccessToken,
         };
-        console.log('✅ Shopify Consent API ready', window.Shopify.customerPrivacy);
+        window.Shopify.customerPrivacy?.setTrackingConsent(
+          {
+            analytics: false,
+            marketing: false,
+            preferences: false,
+            sale_of_data: false,
+          },
+          () => {}
+        );
       }}
     />
   );

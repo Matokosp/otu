@@ -34,7 +34,9 @@ type ProductData = {
   availableForSale?: boolean | null;
 };
 
-export const Product = ({ productData }: { productData?: ProductData }) => {
+export const Product = ({ productData, isInternational }: { productData?: ProductData; isInternational?: boolean }) => {
+  const vatLabel = isInternational ? "Excluding VAT — import duties may apply" : "Including VAT";
+
   const [activeItem, setActiveItem] = useState<null | number>(null);
   const [activeImage, setActiveImage] = useState(0);
   const imageRefs = useRef<HTMLDivElement[] | any>([]);
@@ -268,7 +270,7 @@ export const Product = ({ productData }: { productData?: ProductData }) => {
                   </p>
                   <div>
                     <p>{productData?.price ? formatPrice(productData.price) : ""}</p>
-                    <p className={`opacity-50`}>Including VAT</p>
+                    <p className={`opacity-50`}>{vatLabel}</p>
                     <p
                       className="!select-all opacity-50 pointer-events-auto"
                       style={{ WebkitUserSelect: "all" }}

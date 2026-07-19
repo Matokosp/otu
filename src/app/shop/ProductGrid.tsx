@@ -44,7 +44,7 @@ export const ProductGrid = ({ products }: { products?: ShopifyProduct[] }) => {
 
     return (
         <div className="grid grid-cols-2 lg:grid-cols-6 gap-x-[10px] gap-y-[25px] px-[10px]">
-            {cells.map((c,i) => {
+            {cells.map((c) => {
                 const p = fallback[c.productIndex];
                 const isFirstImageOfProduct = c.imageIndex === 0;
                 const isSecondImageOfProduct = c.imageIndex === 1;
@@ -84,11 +84,10 @@ export const ProductGrid = ({ products }: { products?: ShopifyProduct[] }) => {
 
 export const HighlightedProduct = ({ products }: { products?: ShopifyProduct[] }) => {
     const { isFilteredShop } = useGlobalContext();
-    const featuredProducts = products?.filter((product) => Array.isArray(product.tags) && product.tags.includes("Featured"));
     return products && products.length > 0 && isFilteredShop === null ? (
         products
             .filter((product) => Array.isArray(product.tags) && product.tags.includes("Featured"))
-            .map((product: ShopifyProduct, i) => (
+            .map((product: ShopifyProduct) => (
                 <Link href={`/products/${product.handle}`} key={product.id}>
                     <div className="grid grid-cols-1 gap-[10px] lg:grid-cols-3 px-[10px] mb-[10px]">
                         <div className="col-span-1 lg:col-start-2 flex items-center">

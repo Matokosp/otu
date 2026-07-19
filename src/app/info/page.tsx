@@ -1,5 +1,20 @@
+import { Metadata } from "next";
 import Content from "../Components/Content/Content";
 import Menu from "../Components/Menu/Menu";
+
+export const metadata: Metadata = {
+  title: "Info - OF THE USELESS",
+  description:
+    "Contact, lead times & shipping, payments, custom pieces, trade, and exchange & returns information for OF THE USELESS.",
+  openGraph: {
+    url: "https://oftheuseless.com/info",
+    title: "Info - OF THE USELESS",
+    description:
+      "Contact, lead times & shipping, payments, custom pieces, trade, and exchange & returns information for OF THE USELESS.",
+    siteName: "OF THE USELESS",
+    images: [{ url: "/images/meta/hero_image.jpg" }],
+  },
+};
 
 export default function Page() {
   const texts: { title: string; text: string; id: string }[] = [
@@ -58,7 +73,7 @@ export default function Page() {
     },
     {
       title: "Trade And business clients",
-      link: "#Trade",
+      link: "#trade",
     },
     {
       title: "Exchange and Returns",

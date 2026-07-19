@@ -1,32 +1,64 @@
 import { NextRequest, NextResponse } from "next/server";
-import { createCart, addToCart, getCart, updateCartLine, removeCartLine } from "../../lib/cart";
+import { cookies } from "next/headers";
+import {
+  createCart,
+  addToCart,
+  getCart,
+  updateCartLine,
+  removeCartLine,
+  updateCartBuyerIdentity,
+} from "../../lib/cart";
+import { getRegionCountry, isValidRegion, COOKIE_NAME } from "../../lib/market";
+
+async function resolveCountry() {
+  const jar = await cookies();
+  const region = jar.get(COOKIE_NAME)?.value;
+  return getRegionCountry(isValidRegion(region) ? region : "sweden");
+}
 
 export async function POST(req: NextRequest) {
   const { action, variantId, quantity, cartId, lineId } = await req.json();
+  const country = await resolveCountry();
 
   try {
     if (action === "create") {
-      const result = await createCart(variantId, quantity);
+      if (typeof variantId !== "string" || !variantId) {
+        return NextResponse.json({ error: "variantId is required" }, { status: 400 });
+      }
+      const result = await createCart(variantId, quantity, country);
       return NextResponse.json(result);
     }
 
     if (action === "add") {
-      const result = await addToCart(cartId, variantId, quantity);
+      if (typeof cartId !== "string" || !cartId || typeof variantId !== "string" || !variantId) {
+        return NextResponse.json({ error: "cartId and variantId are required" }, { status: 400 });
+      }
+      const result = await addToCart(cartId, variantId, quantity, country);
       return NextResponse.json(result);
     }
 
     if (action === "get") {
-      const result = await getCart(cartId);
+      if (typeof cartId !== "string" || !cartId) {
+        return NextResponse.json({ error: "cartId is required" }, { status: 400 });
+      }
+      await updateCartBuyerIdentity(cartId, country);
+      const result = await getCart(cartId, country);
       return NextResponse.json(result);
     }
 
     if (action === "update") {
-      const result = await updateCartLine(cartId, lineId, quantity);
+      if (typeof cartId !== "string" || !cartId || typeof lineId !== "string" || !lineId) {
+        return NextResponse.json({ error: "cartId and lineId are required" }, { status: 400 });
+      }
+      const result = await updateCartLine(cartId, lineId, quantity, country);
       return NextResponse.json(result);
     }
 
     if (action === "remove") {
-      const result = await removeCartLine(cartId, lineId);
+      if (typeof cartId !== "string" || !cartId || typeof lineId !== "string" || !lineId) {
+        return NextResponse.json({ error: "cartId and lineId are required" }, { status: 400 });
+      }
+      const result = await removeCartLine(cartId, lineId, country);
       return NextResponse.json(result);
     }
 

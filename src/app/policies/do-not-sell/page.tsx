@@ -11,9 +11,9 @@ export default function DoNotSellPage() {
   const handleOptOut = () => {
     const current = getConsent();
     const choice = {
-      analytics: current?.analytics ?? true,
-      marketing: current?.marketing ?? true,
-      preferences: current?.preferences ?? true,
+      analytics: current?.analytics ?? false,
+      marketing: current?.marketing ?? false,
+      preferences: current?.preferences ?? false,
       sale_of_data: false,
     };
     setConsent(choice);
