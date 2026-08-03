@@ -20,6 +20,11 @@
   }
 }
 
+html,
+body {
+  overflow-x: hidden;
+}
+
 body {
   /* color: var(--foreground); */
   /* background: var(--background); */
@@ -35,6 +40,53 @@ body {
 
 a {
   cursor: pointer !important ;
+}
+
+/* Blog article image width variants. Add one of these classes to an <img>
+   tag via Shopify's article HTML/code editor to control its width on
+   desktop. Plain CSS (not Tailwind utilities) because this content comes
+   from Shopify's CMS through dangerouslySetInnerHTML, so Tailwind's JIT
+   never sees these class names and would otherwise purge them.
+   See README.md "Blog article image widths" for editor instructions. */
+.article-img--constrained {
+  width: 100%;
+}
+
+/* Both variants below are derived from the page's actual 12-col grid
+   (grid-cols-12, gap-x-[10px], px-[10px] container padding — see
+   Content.tsx), not a viewport-centered guess: the article text column is
+   `lg:col-start-4 lg:col-end-9` (3 tracks + 3 gaps + the 10px container
+   padding to its left), which is NOT centered on the viewport, so a plain
+   `50% - 50vw` breakout lands off to one side. One column track's width is
+   `(100vw - 130px) / 12` (100vw minus 10px page padding on each side and
+   11 x 10px gaps between the 12 tracks). */
+
+/* Same left edge as the text (col 4), extends to col 11 (7 tracks + 6
+   internal gaps) instead of the text's 5 tracks. */
+.article-img--medium {
+  display: block;
+  width: calc((100vw - 130px) * 7 / 12 + 60px);
+  max-width: calc(100vw - 20px);
+}
+
+/* Spans the full grid: from the page's left 10px margin to its right 10px
+   margin. margin-left shifts left by the text column's actual offset (25vw
+   + 7.5px) and back in by the 10px page margin. */
+.article-img--full {
+  display: block;
+  width: calc(100vw - 20px);
+  max-width: calc(100vw - 20px);
+  margin-left: calc(2.5px - 25vw);
+}
+
+@media (max-width: 1023px) {
+  .article-img--medium,
+  .article-img--full {
+    width: 100%;
+    max-width: 100%;
+    margin-left: 0;
+    margin-right: 0;
+  }
 }
 
 @keyframes hard-flicker {

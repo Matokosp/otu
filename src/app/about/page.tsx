@@ -1,5 +1,20 @@
+import { Metadata } from "next";
 import Content from "../Components/Content/Content";
 import Menu from "../Components/Menu/Menu";
+
+export const metadata: Metadata = {
+  title: "About - OF THE USELESS",
+  description:
+    "OF THE USELESS is an independent brand based in Stockholm, Sweden. We design, handcraft, and produce pieces for the everyday, with locally sourced materials.",
+  openGraph: {
+    url: "https://oftheuseless.com/about",
+    title: "About - OF THE USELESS",
+    description:
+      "OF THE USELESS is an independent brand based in Stockholm, Sweden. We design, handcraft, and produce pieces for the everyday, with locally sourced materials.",
+    siteName: "OF THE USELESS",
+    images: [{ url: "/images/meta/hero_image.jpg" }],
+  },
+};
 
 const Page = () => {
   return (

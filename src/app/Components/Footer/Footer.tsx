@@ -1,13 +1,22 @@
 import Link from "next/link";
 import { Typing } from "../Typing/Typing";
+import RegionSelector from "./RegionSelector";
+import { getServerRegion } from "@/app/lib/market";
 
-const Footer = () => {
+const Footer = async () => {
+  const region = await getServerRegion();
+
   return (
     <footer className="mt-[350px] uppercase p-[10px]">
       <div className="grid grid-cols-4 lg:grid-cols-12 gap-x-[10px]">
         <div className="lg:col-span-3 col-span-2"></div>
         <div className="lg:col-span-3 col-span-2 flex flex-col gap-y-[30px] lg:gap-y-[50px]">
           <ul>
+            <li>
+              <Link href="/about">
+                <Typing text="About" />
+              </Link>
+            </li>
             <li>
               <Link href="/info">
                 <Typing text="Contact" />
@@ -18,14 +27,19 @@ const Footer = () => {
                 <Typing text="Lead times & Shipping" />
               </Link>
             </li>
-            <li>
+            {/* <li>
               <Link href="/info">
                 <Typing text="Payments" />
               </Link>
-            </li>
-            <li>
+            </li> */}
+            {/* <li>
               <Link href="/info">
                 <Typing text="Custom pieces" />
+                </Link>
+                </li> */}
+            <li>
+              <Link href="/info">
+                <Typing text="Exchange & returns" />
               </Link>
             </li>
             <li>
@@ -34,9 +48,11 @@ const Footer = () => {
               </Link>
             </li>
             <li>
-              <Link href="/info">
-                <Typing text="Exchange & returns" />
-              </Link>
+              {/* Withdrawal function ("ångerknapp") required by distansavtalslagen since 19 June 2026.
+                  Official customer accounts URL from Shopify admin → Settings → Customer accounts. */}
+              <a href="https://shopify.com/95940903255/account">
+                <Typing text="Cancel your order" />
+              </a>
             </li>
           </ul>
           <ul className="lg:hidden">
@@ -44,14 +60,15 @@ const Footer = () => {
               <Link href={"/about"}>About</Link>
             </li>
           </ul>
+          <RegionSelector initialRegion={region} />
           <ul>
             <li>
-              <Link href={"/terms-and-conditions#privacy"}>
+              <Link href={"/policies/privacy-policy"}>
                 <Typing text="Privacy Policy" />
               </Link>
             </li>
             <li>
-              <Link href={"/terms-and-conditions#terms"}>
+              <Link href={"/policies/terms-of-service"}>
                 <Typing text="Terms & conditions" />
               </Link>
             </li>
@@ -72,7 +89,7 @@ const Footer = () => {
         </div>
       </div>
       <div className="lg:text-right lg:mt-[200px] mt-[150px]">
-        <p>all content © of the useless 2025</p>
+        <p>all content © of the useless {new Date().getFullYear()}</p>
       </div>
     </footer>
   );

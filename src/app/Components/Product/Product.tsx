@@ -6,35 +6,131 @@ import Menu from "../../Components/Menu/Menu";
 import { CustomImage } from "../../Components/Image/Image";
 import Button from "../../Components/Button/Button";
 import { useGlobalContext } from "@/app/context/store";
-
-import siteData from "../../data/data.json";
 import { Typing } from "../../Components/Typing/Typing";
+import { formatPrice } from "@/app/lib/formatPrice";
 
-export const Product = () => {
+const CART_ID_KEY = "shopify_cart_id";
+
+type ProductData = {
+  title?: string;
+  price?: string;
+  images?: string[];
+  thumbnailImages?: string[];
+  variantId?: string | null;
+  metafields: {
+    plp_images?: string[];
+    material_and_finish?: string;
+    rarity?: string;
+    description?: string;
+    dimensions?: string;
+    material_and_finish_description?: string;
+    care?: string;
+    shipping?: string;
+    description_long?: string;
+    description_long_image?: { url: string; altText: string };
+  } | null;
+  productAvailable?: boolean | null;
+  quantityAvailable?: number | null;
+  availableForSale?: boolean | null;
+};
+
+export const Product = ({ productData, isInternational }: { productData?: ProductData; isInternational?: boolean }) => {
+  const vatLabel = isInternational ? "Excluding VAT — import duties may apply" : "Including VAT";
+
   const [activeItem, setActiveItem] = useState<null | number>(null);
   const [activeImage, setActiveImage] = useState(0);
   const imageRefs = useRef<HTMLDivElement[] | any>([]);
   const [activeMobileImage, setActiveMobileImage] = useState(1);
+  const [isAddingToCart, setIsAddingToCart] = useState(false);
+  const [addedToCart, setAddedToCart] = useState(false);
 
-  const { windowHeight } = useGlobalContext();
+  const { windowHeight, refreshCartCount } = useGlobalContext();
 
-  const images = [
-    "/images/product/chair_p_01.jpg",
-    "/images/product/chair_p_02.jpg",
-    "/images/product/chair_p_03.jpg",
-    "/images/product/chair_p_04.jpg",
-  ];
+  const images = productData?.images && productData.images.length > 0 ? productData.images : [];
+  const thumbnailImages = productData?.images && productData.images.length > 0 ? productData.images : [];
 
-  const thumbnailImages = [
-    "/images/product/chair_xs_01.jpg",
-    "/images/product/chair_xs_02.jpg",
-    "/images/product/chair_xs_03.jpg",
-    "/images/product/chair_xs_04.jpg",
-  ];
+  const isMadeToOrder = productData?.quantityAvailable === 0 && productData?.availableForSale === true;
+  const soldOut = productData?.availableForSale === false;
+  const variantId = productData?.variantId ?? "";
+
+  const getButtonText = () => {
+    if (isAddingToCart) return "adding...|adding...";
+    if (addedToCart) return "added|added to cart";
+    if (soldOut) return "out of stock|out of stock";
+    if (isMadeToOrder) return "enquire|made to order";
+    return "in stock|add to cart";
+  };
+
+  const handleAddToCart = async () => {
+    if (isMadeToOrder || soldOut || isAddingToCart || !variantId) return;
+
+    setIsAddingToCart(true);
+    try {
+      const existingCartId = localStorage.getItem(CART_ID_KEY);
+
+      if (existingCartId) {
+        const res = await fetch("/api/cart", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ action: "add", cartId: existingCartId, variantId, quantity: 1 }),
+        });
+        const result = await res.json();
+
+        if (result.userErrors?.length > 0) {
+          const res2 = await fetch("/api/cart", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ action: "create", variantId, quantity: 1 }),
+          });
+          const newResult = await res2.json();
+          if (newResult.cart?.id) {
+            localStorage.setItem(CART_ID_KEY, newResult.cart.id);
+          }
+        }
+      } else {
+        const res = await fetch("/api/cart", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ action: "create", variantId, quantity: 1 }),
+        });
+        const result = await res.json();
+        if (result.cart?.id) {
+          localStorage.setItem(CART_ID_KEY, result.cart.id);
+        }
+      }
+
+      setAddedToCart(true);
+      refreshCartCount();
+      setTimeout(() => setAddedToCart(false), 2000);
+    } catch (error) {
+      console.error("Error adding to cart:", error);
+    } finally {
+      setIsAddingToCart(false);
+    }
+  };
 
   const handleClick = (i: number) => {
     setActiveItem(activeItem === i ? null : i);
   };
+
+  const productInfo = [
+    {
+      "title": "Dimensions",
+      "text": productData?.metafields?.dimensions ? `<p>${productData.metafields.dimensions}</p>` : ""
+    },
+    {
+      "title": "Material and Finish",
+      "text": productData?.metafields?.material_and_finish_description ? `<p>${productData.metafields.material_and_finish_description}</p>` : ""
+    },
+    {
+      "title": "Care",
+      "text": productData?.metafields?.care ? `<p>${productData.metafields.care}</p>` : ""
+    },
+    {
+      "title": "Shipping",
+      "text": productData?.metafields?.shipping ? `<p>${productData.metafields.shipping}</p>` : ""
+    }
+  ];
 
   const handleImageButtonClick = (i: number) => {
     setActiveImage(i);
@@ -83,10 +179,42 @@ export const Product = () => {
     };
   }, []);
 
+  const renderButton = () => {
+
+    if (soldOut) {
+      return (
+        <Button
+          className="z-[999] pointer-events-auto opacity-50"
+          disabled
+          text="out of stock|out of stock"
+        />
+      );
+    }
+
+    if (isMadeToOrder) {
+      return (
+        <Button
+          className="z-[999] pointer-events-auto"
+          link="mailto:enquires@oftheuseless.com"
+          text="enquire|made to order"
+        />
+      );
+    }
+
+    return (
+      <Button
+        className="z-[999] pointer-events-auto"
+        text={getButtonText()}
+        onClick={() => handleAddToCart()}
+        disabled={isAddingToCart}
+      />
+    );
+  };
+
   return (
     <>
       <Menu product />
-      <main className="relative  lg:mt-0">
+      <main className="relative lg:mt-0">
         {/* LOGO */}
         <div
           className="w-[calc(100vw/12*2)] px-[10px] grid fixed z-[99] translate-y-[-50%]  lg:block"
@@ -116,15 +244,15 @@ export const Product = () => {
                     <button
                       className="pointer-events-auto"
                       onClick={() => handleImageButtonClick(i)}
-                      key={images[i]}
+                      key={image}
                     >
                       <CustomImage
                         src={images[i]}
                         ratio="2/3"
                         alt=""
-                        className={`w-full ${
-                          activeImage === i ? "opacity-100" : "opacity-50"
-                        }`}
+                        className={`w-full ${activeImage === i ? "opacity-100" : "opacity-50"
+                          }`}
+                          quality={80}
                       />
                     </button>
                   );
@@ -136,33 +264,27 @@ export const Product = () => {
               >
                 <div className="flex flex-col gap-y-[40px] break-words">
                   <p className="hidden lg:block">
-                    No Hard feelings chair <br />
-                    OILED OAK
+                    {productData?.title ?? "No Hard feelings chair"} <br />
+                    {productData?.metafields?.material_and_finish ? productData.metafields.material_and_finish : ""} <br />
+                    {productData?.metafields?.rarity ? <span className="text-[rgba(0,0,0,0.5)]">{productData.metafields.rarity}</span> : ""}
                   </p>
                   <div>
-                    <p>€ 1900</p>
-                    <p className={`opacity-50`}>Including VAT</p>
+                    <p>{productData?.price ? formatPrice(productData.price) : ""}</p>
+                    <p className={`opacity-50`}>{vatLabel}</p>
                     <p
                       className="!select-all opacity-50 pointer-events-auto"
                       style={{ WebkitUserSelect: "all" }}
                     >
-                      {/* <a
-                        href="mailto:Enquires@oftheuseless.com"
-                        className="opacity-50 pointer-events-auto"
-                      > */}
-                      {/* <Typing text="Enquires@oftheuseless.com" /> */}
                       Enquires@oftheuseless.com
-                      {/* </a> */}
                     </p>
                   </div>
                   <p className="ml-[calc(50vw-10px)] lg:ml-0">
-                    Handcrafted in Sweden <br />
-                    LOCALLY SOURCED OAK
+                    {productData?.metafields?.description ? productData.metafields.description : ""}
                   </p>
                 </div>
                 <div className="mt-[10px] ml-[calc(50vw-10px)] lg:ml-0">
                   <ul className="[&>li>h4]:cursor-pointer">
-                    {siteData.product.info.map((item, i) => {
+                    {productInfo.map((item, i) => {
                       return (
                         <li key={item.title} className="overflow-hidden">
                           <h4
@@ -172,11 +294,10 @@ export const Product = () => {
                             {item.title} {activeItem === i ? "-" : "+"}
                           </h4>
                           <span
-                            className={`pl-[20px] block ${
-                              activeItem === i
-                                ? "h-auto mb-[15px] mt-[5px]"
-                                : "h-0"
-                            }`}
+                            className={`pl-[20px] block ${activeItem === i
+                              ? "h-auto mb-[15px] mt-[5px]"
+                              : "h-0"
+                              }`}
                             dangerouslySetInnerHTML={{ __html: item.text }}
                           />
                         </li>
@@ -186,11 +307,7 @@ export const Product = () => {
                 </div>
               </div>
             </div>
-            <Button
-              className="z-[999] pointer-events-auto"
-              link="mailto:enquires@oftheuseless.com"
-              text="enquire|made to order"
-            />
+            {renderButton()}
           </div>
           <div
             className="col-span-5 flex flex-col gap-y-[10px] px-[10px] lg:px-0 pb-[10px] lg:!mt-[0px]"
@@ -232,17 +349,16 @@ export const Product = () => {
             <div className="w-[100%] mt-[40px] uppercase">
               <div className="flex flex-col gap-y-[40px] break-words ml-[calc(50vw-10px)] lg:ml-0">
                 <div>
-                  <p>€ 1900</p>
+                  <p>{productData?.price ? formatPrice(productData.price) : ""}</p>
                   <p className={`opacity-50`}>Including VAT</p>
                 </div>
                 <p className="">
-                  Handcrafted in Sweden <br />
-                  LOCALLY SOURCED OAK
+                  {productData?.metafields?.description ? productData.metafields.description : ""}
                 </p>
               </div>
               <div className="mt-[10px] ml-[calc(50vw-10px)] relative">
                 <ul className="[&>li>h4]:cursor-pointer absolute flex flex-col gap-y-[5px]">
-                  {siteData.product.info.map((item, i) => {
+                  {productInfo.map((item, i) => {
                     return (
                       <li key={item.title} className="overflow-hidden">
                         <h4
@@ -252,11 +368,10 @@ export const Product = () => {
                           {item.title} {activeItem === i ? "-" : "+"}
                         </h4>
                         <span
-                          className={`pl-[20px] block ${
-                            activeItem === i
-                              ? "h-auto mb-[15px] mt-[5px]"
-                              : "h-0"
-                          }`}
+                          className={`pl-[20px] block ${activeItem === i
+                            ? "h-auto mb-[15px] mt-[5px]"
+                            : "h-0"
+                            }`}
                           dangerouslySetInnerHTML={{ __html: item.text }}
                         />
                       </li>
@@ -297,9 +412,8 @@ export const Product = () => {
                   i !== 0 && (
                     <div
                       key={images[i]}
-                      className={`w-full top-0 absolute ${
-                        activeMobileImage === i && "relative z-[2]"
-                      }`}
+                      className={`w-full top-0 absolute ${activeMobileImage === i && "relative z-[2]"
+                        }`}
                       style={{
                         scrollMarginTop: "73px",
                       }}
@@ -322,10 +436,9 @@ export const Product = () => {
                   i !== 0 && (
                     <div
                       onClick={() => setActiveMobileImage(i)}
-                      key={images[i]}
-                      className={`w-[50px] top-0 cursor-pointer ${
-                        activeMobileImage === i ? "opacity-100" : "opacity-50"
-                      }`}
+                      key={image}
+                      className={`w-[50px] top-0 cursor-pointer ${activeMobileImage === i ? "opacity-100" : "opacity-50"
+                        }`}
                       style={{
                         scrollMarginTop: "73px",
                       }}
@@ -336,6 +449,7 @@ export const Product = () => {
                         alt=""
                         className={`w-full`}
                         key={images[i]}
+                        quality={50}
                       />
                     </div>
                   )
@@ -343,11 +457,7 @@ export const Product = () => {
               })}
             </div>
           </div>
-          <Button
-            className="z-[999] pointer-events-auto"
-            link="mailto:enquires@oftheuseless.com"
-            text="enquire|made to order"
-          />
+          {renderButton()}
           <p className="px-[10px] mt-[10px] uppercase">
             <a
               href="mailto:Enquires@oftheuseless.com"
@@ -358,41 +468,34 @@ export const Product = () => {
           </p>
         </div>
 
-        <div className="grid lg:grid-cols-12 grid-cols-4 gap-[10px] px-[10px] mt-[31px] lg:mt-0">
-          <div className="lg:col-span-5 col-span-4 flex flex-col justify-between gap-y-[100px] lg:gap-y-[unset]">
-            <div className="w-full flex uppercase">
-              <p className="lg:w-3/5 w-2/4">No Hard feelings chair</p>
-              <p>SOLID OILED OAK</p>
+        {productData?.metafields?.description_long &&
+          <div className="grid lg:grid-cols-12 grid-cols-4 gap-[10px] px-[10px] mt-[31px] lg:mt-0">
+            <div className="lg:col-span-5 col-span-4 flex flex-col justify-between gap-y-[100px] lg:gap-y-[unset]">
+              <div className="w-full flex uppercase">
+                <p className="lg:w-3/5 w-2/4">{productData?.title ?? ""}</p>
+                <p>{productData?.metafields.material_and_finish}</p>
+              </div>
+              <p className="uppercase lg:w-3/5 w-full" dangerouslySetInnerHTML={{ __html: productData?.metafields?.description_long ?? "" }} />
             </div>
-            <p className="uppercase lg:w-3/5 w-full">
-              no hard feelings is crafted from locally sourced Swedish oak,
-              chosen for its natural charm and durability. Each piece reflects
-              the legacy of its tree, revealed in unique and expressive grain
-              patterns .
-              <br />
-              <br />
-              Our PIECES ARE stained with natural oil, preserving and enhancing
-              the oak’s inherent beauty.
-            </p>
+            <div className="lg:col-span-7 col-span-4 relative uppercase flex flex-col gap-[10px]">
+              <p className="lg:absolute left-0 bottom-0 origin-top-right lg:translate-x-[calc(-100%-10px)] lg:rotate-90 lg:translate-y-[14px] order-2 lg:order-1">
+                {productData?.metafields?.description_long_image?.altText}
+              </p>
+              <CustomImage
+                alt=""
+                src={productData?.metafields?.description_long_image?.url ? productData.metafields.description_long_image?.url : "/images/placeholder.png"}
+                ratio={"5/4"}
+                className="w-full hidden lg:block"
+              />
+              <CustomImage
+                alt=""
+                src={productData?.metafields?.description_long_image?.url ? productData.metafields.description_long_image?.url : "/images/placeholder.png"}
+                ratio={"2/3"}
+                className="w-full lg:hidden"
+              />
+            </div>
           </div>
-          <div className="lg:col-span-7 col-span-4 relative uppercase flex flex-col gap-[10px]">
-            <p className="lg:absolute left-0 bottom-0 origin-top-right lg:translate-x-[calc(-100%-10px)] lg:rotate-90 lg:translate-y-[14px] order-2 lg:order-1">
-              (Image 1.) swedish oak grain
-            </p>
-            <CustomImage
-              alt=""
-              src={"/images/product/oak_sample_image.jpg"}
-              ratio={"5/4"}
-              className="w-full hidden lg:block"
-            />
-            <CustomImage
-              alt=""
-              src={"/images/product/oak_sample_image_mobile.jpg"}
-              ratio={"2/3"}
-              className="w-full lg:hidden"
-            />
-          </div>
-        </div>
+        }
       </main>
     </>
   );

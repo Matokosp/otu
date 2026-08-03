@@ -8,21 +8,30 @@ const Content = ({
   texts,
   menu,
   fixed,
+  header,
+  htmlText
 }: {
   columns?: 1 | 2;
   text?: string;
+  htmlText?: string;
   texts?: { title: string; text: string; id: string }[];
   menu?: {
     title: string;
     link: string;
   }[];
   fixed?: boolean;
+  header?: React.ReactNode;
 }) => {
   const content =
     columns === 1 && text ? (
       <div
         className="col-span-4 lg:col-start-4 lg:col-end-9"
         dangerouslySetInnerHTML={{ __html: text }}
+      />
+    ) : columns === 1 && htmlText ? (
+       <div
+        className="col-span-4 lg:col-start-4 lg:col-end-9 normal-case [&>p:has(img)+p:has(img)]:mt-[10px] [&>p:not(:has(img))+p:has(img)]:mt-[50px] [&>p:has(img)+p:not(:has(img))]:mt-[50px]"
+        dangerouslySetInnerHTML={{ __html: htmlText }}
       />
     ) : (
       <>
@@ -35,7 +44,7 @@ const Content = ({
                 id={item.id}
               />
               <div
-                className="col-span-4 mb-[35px] lg:mb-0 lg:col-start-6 lg:col-end-11"
+                className="col-span-4 mb-[35px] lg:mb-0 lg:col-start-6 lg:col-end-11 [&_ul_li]:mt-[10px] [&_div_p_span_strong]:block [&_strong]:mt-[10px]"
                 dangerouslySetInnerHTML={{ __html: item.text }}
               />
             </React.Fragment>
@@ -43,6 +52,7 @@ const Content = ({
         })}
       </>
     );
+
   return (
     <div className="grid grid-cols-4 lg:grid-cols-12 gap-x-[10px] px-[10px] uppercase lg:gap-y-[35px]">
       {menu && (
@@ -61,13 +71,11 @@ const Content = ({
         </div>
       )}
       <div
-        className={`w-[calc(100vw/12*2)] px-[10px] grid lg:fixed ${
-          text && fixed && "fixed"
-        } ${
-          menu
+        className={`w-[calc(100vw/12*2)] px-[10px] grid lg:fixed ${text && fixed && "fixed"
+          } ${menu
             ? "mt-[calc(50svh-72px)] mb-[55px] lg:mt-0 lg:mb-0 lg:top-[50svh]"
             : "top-[50svh]"
-        } translate-y-[-50%] z-[999]`}
+          } translate-y-[-50%] z-[999]`}
       >
         <div className="pl-[10%] min-w-[180px] translate-x-[-10px]">
           <Link href={"/"}>
@@ -76,6 +84,11 @@ const Content = ({
         </div>
       </div>
       <div className="lg:col-span-3 hidden lg:block" />
+      {header && (
+        <div className="col-span-4 mb-[35px] lg:mb-0 lg:col-span-2 flex flex-col gap-y-[50px] mt-[70px] lg:mt-0">
+          {header}
+        </div>
+      )}
       {content}
     </div>
   );

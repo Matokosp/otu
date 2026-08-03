@@ -25,7 +25,7 @@ export const metadata: Metadata = {
   },
 };
 
-export default function Home() {
+export default async function Home() {
   const images = [
     "/images/home/chair_01.jpg",
     "/images/home/chair_02.jpg",
@@ -35,7 +35,7 @@ export default function Home() {
 
   return (
     <div className="relative">
-      <Menu />
+      <Menu page={false} product={false} />
       <main className="relative mt-[-100svh] lg:pt-[73px] pb-[33px] pt-[calc(50svh+65px)]">
         <div className="w-[calc(100vw/12*2)] px-[10px] grid fixed top-[50svh] translate-y-[-50%]">
           <div className="pl-[10%] min-w-[180px]">
@@ -46,7 +46,7 @@ export default function Home() {
         </div>
         <div className="grid-cols-4 lg:grid-cols-12 grid px-[10px] gap-x-[10px]">
           <div className="col-span-4 lg:col-start-4 lg:col-end-10">
-            <Link href={"/shop/no-hard-feelings"}>
+            <Link href={"/products/no-hard-feelings-chair"}>
               <CustomImage
                 ratio="4/5"
                 src={images[0]}
@@ -58,7 +58,7 @@ export default function Home() {
         </div>
         <div className="grid-cols-4 lg:grid-cols-12 grid mt-[10px] gap-[10px] overflow-hidden">
           <div className="col-span-3 lg:col-start-1 lg:col-end-8">
-            <Link href={"/shop/no-hard-feelings"}>
+            <Link href={"/products/no-hard-feelings-chair"}>
               <CustomImage
                 ratio="2/3"
                 src={images[1]}
@@ -69,7 +69,7 @@ export default function Home() {
           </div>
           <div className="lg:hidden col-span-1" />
           <div className="col-start-3 col-end-5 lg:col-start-8 lg:col-end-13 translate-x-[2px] lg:translate-x-0">
-            <Link href={"/shop/no-hard-feelings"}>
+            <Link href={"/products/no-hard-feelings-chair"}>
               <CustomImage
                 ratio="4/5"
                 src={images[2]}
@@ -81,7 +81,7 @@ export default function Home() {
         </div>
         <div className="grid-cols-4 lg:grid-cols-12 grid lg:mt-[10px] mt-[100px] gap-[10px] px-[10px]">
           <div className="lg:col-start-4 lg:col-end-10 col-span-4 order-2 lg:order-1">
-            <Link href={"/shop/no-hard-feelings"}>
+            <Link href={"/products/no-hard-feelings-chair"}>
               <CustomImage
                 ratio="4/5"
                 src={images[3]}
