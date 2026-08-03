@@ -4,7 +4,7 @@ import { Product as ProductClient } from "../../Components/Product/Product";
 import Menu from "../../Components/Menu/Menu";
 import Link from "next/link";
 import { Typing } from "../../Components/Typing/Typing";
-import { getServerRegion, getRegionCountry, INTERNATIONAL_COUNTRIES } from "../../lib/market";
+import { getServerRegion, getRegionCountry } from "../../lib/market";
 
 type Props = { params: Promise<{ handle: string }> };
 
@@ -83,7 +83,7 @@ export default async function ProductPage({ params }: Props) {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      <ProductClient productData={product} isInternational={INTERNATIONAL_COUNTRIES.includes(country)} />
+      <ProductClient productData={product} isInternational={region === "international"} />
     </>
   );
 }

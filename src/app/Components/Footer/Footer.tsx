@@ -60,6 +60,7 @@ const Footer = async () => {
               <Link href={"/about"}>About</Link>
             </li>
           </ul>
+          <RegionSelector initialRegion={region} />
           <ul>
             <li>
               <Link href={"/policies/privacy-policy"}>
@@ -72,7 +73,6 @@ const Footer = async () => {
               </Link>
             </li>
           </ul>
-          <RegionSelector initialRegion={region} />
         </div>
         <div className="lg:hidden col-span-2" />
         <div className="lg:col-span-3 col-span-2 mt-[30px] lg:mt-0">

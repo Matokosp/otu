@@ -13,22 +13,34 @@ export const REGION_COUNTRY: Record<MarketRegion, string> = {
 };
 
 export const REGION_LABEL: Record<MarketRegion, string> = {
-  sweden: "Sweden",
-  europe: "Europe",
-  international: "International",
+  sweden: "SWEDEN",
+  europe: "EUROPE",
+  international: "INTERNATIONAL",
 };
 
-// Countries in the International market (no duties collected). Terms §4.1:
-// these visitors see "Excluding VAT" instead of "Including VAT".
-export const INTERNATIONAL_COUNTRIES = ["JP", "NO", "KR"];
+// Shown instead of REGION_LABEL below the `lg` breakpoint.
+export const REGION_LABEL_SHORT: Record<MarketRegion, string> = {
+  sweden: "SWEDEN",
+  europe: "EUR",
+  international: "INT",
+};
+
+// EU member states (excluding Sweden, handled separately). Terms §4.1: EU
+// visitors see EUR "Including VAT". Everyone else (incl. UK, CH, NO, US,
+// JP, KR, ...) is "international" and sees EUR "Excluding VAT" per §4.1/4.3.
+export const EU_COUNTRIES = [
+  "AT", "BE", "BG", "HR", "CY", "CZ", "DK", "EE", "FI", "FR", "DE", "GR",
+  "HU", "IE", "IT", "LV", "LT", "LU", "MT", "NL", "PL", "PT", "RO", "SK",
+  "SI", "ES",
+];
 
 export const COOKIE_NAME = "otu_market_region";
 
 export function getRegionFromCountryCode(code: string | undefined | null): MarketRegion {
   const upper = (code || "").toUpperCase();
   if (upper === "SE") return "sweden";
-  if (INTERNATIONAL_COUNTRIES.includes(upper)) return "international";
-  return "europe";
+  if (EU_COUNTRIES.includes(upper)) return "europe";
+  return "international";
 }
 
 export function isValidRegion(value: string | undefined | null): value is MarketRegion {

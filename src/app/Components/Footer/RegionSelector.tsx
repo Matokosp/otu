@@ -6,6 +6,7 @@ import {
   MarketRegion,
   REGIONS,
   REGION_LABEL,
+  REGION_LABEL_SHORT,
   getRegionCookie,
   setRegionCookie,
 } from "@/app/lib/market";
@@ -27,7 +28,7 @@ export default function RegionSelector({ initialRegion }: { initialRegion: Marke
   };
 
   return (
-    <ul>
+    <ul className="flex gap-[10px]">
       {REGIONS.map((r) => (
         <li key={r}>
           <button
@@ -35,7 +36,8 @@ export default function RegionSelector({ initialRegion }: { initialRegion: Marke
             onClick={() => handleSelect(r)}
             className={region === r ? "underline" : ""}
           >
-            {REGION_LABEL[r]}
+            <span className="hidden lg:inline">{REGION_LABEL[r]}</span>
+            <span className="lg:hidden">{REGION_LABEL_SHORT[r]}</span>
           </button>
         </li>
       ))}
