@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useGlobalContext } from "@/app/context/store";
 import { Typing } from "../Typing/Typing";
 import { Cart } from "../Cart/Cart";
+import { LibraryDrawer } from "../Library/LibraryDrawer";
 import { useState } from "react";
 
 const Menu = ({
@@ -17,6 +18,7 @@ const Menu = ({
   shop?: boolean;
 }) => {
   const [cartOpen, setCartOpen] = useState(false);
+  const [libraryOpen, setLibraryOpen] = useState(false);
 
   const { windowHeight, setIsFilteredShop, isFilteredShop, cartCount, refreshCartCount } = useGlobalContext();
 
@@ -32,6 +34,7 @@ const Menu = ({
         style={{ height: !page && !product ? windowHeight : "" }}
       >
         <Cart isOpen={cartOpen} onClose={handleCartClose} />
+        <LibraryDrawer isOpen={libraryOpen} onClose={() => setLibraryOpen(false)} />
         <nav className="grid lg:grid-cols-12 grid-cols-4 p-[10px] gap-x-[10px] mb-[25px] w-screen">
           <p className="uppercase col-span-3 pointer-events-auto hidden lg:block">
             {/* <Link className="lg:hidden" href={"/"}>
@@ -52,10 +55,11 @@ const Menu = ({
               </Link>
             </p>
           </div>
-          <p className="uppercase col-span-3 pointer-events-auto hidden lg:block">
-            <Link href="/about">
-              <Typing text="about" />
-            </Link>
+          <p
+            onClick={() => setLibraryOpen(true)}
+            className="uppercase col-span-3 pointer-events-auto cursor-pointer hidden lg:block"
+          >
+            <Typing text="library" />
           </p>
           <p onClick={() => setCartOpen(true)} className="uppercase col-span-3 pointer-events-auto cursor-pointer text-right lg:text-left">
              <Typing text={`cart ${cartCount > 0 ? ` [${cartCount}]` : "[0]"}`} />
